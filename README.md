@@ -1,3 +1,18 @@
+# Personalized Feed Generator
+
+Forked from bluesky-social/feed-generator
+
+Goal is to provide a personalized feed generator server, that sends the requesting user posts that they're likely to like.
+
+## general architecture
+
+- `subscription.ts`
+  - contains the indexing service, which listens to the "firehose" of new events & scores posts according to the server's internal model
+- `feed-generation.ts`
+  - contains the request handler, which returns 20 high-scoring (i.e. high likelihood of being liked) posts
+- `learning.ts`
+  - contains the code hosting an ML model that continuously learns to better predict what the user will like.
+
 # ATProto Feed Generator
 
 🚧 Work in Progress 🚧 
@@ -29,6 +44,8 @@ For users, this should feel like visiting a page in the app. Once they subscribe
 ## Getting Started
 
 We've set up this simple server with SQLite to store & query data. Feel free to switch this out for whichever database you prefer.
+
+First, `npm install --include=dev`.
 
 Next you will need to do two things:
 
