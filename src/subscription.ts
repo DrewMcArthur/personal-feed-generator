@@ -22,7 +22,6 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   async handleEvent(evt: RepoEvent) {
     if (!isCommit(evt)) return
     const ops = await getOpsByType(evt)
-    ops.likes.creates.map(l => console.log(l))
 
     const likesToTrainOn = ops.likes.creates.filter((like) => like.author === this.userDid)
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
@@ -37,7 +36,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
         .filter(async (create) => {
           // only index top 20% of posts randomly for now
           let { score } = await create
-          return score > 0.8
+          return score && score !== undefined && score > 0.8
         })
         .map(async (create) => {
           let { post, score } = await create
@@ -54,6 +53,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     )
 
     if (likesToTrainOn.length > 0) {
+      console.debug('found %d likes to train on', likesToTrainOn.length)
       await this.db
         .insertInto('like')
         .values(likesToTrainOn.map(like => ({
@@ -73,7 +73,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     }
 
     if (postsToCreate.length > 0) {
-      console.log("indexing post with score: ", postsToCreate.map((p) => p.score))
+      console.debug("indexing posts with scores: ", postsToCreate.map((p) => p.score))
       await this.db
         .insertInto('post')
         .values(postsToCreate)
@@ -88,7 +88,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   _clearCache() {
     let threshold = new Date()
     const newMinutes = threshold.getMinutes() - this.cacheTtlMin
-    console.log("clearing cache", newMinutes)
+    console.debug("clearing cache", newMinutes)
     threshold.setMinutes(newMinutes)
 
     this.db.deleteFrom('post')

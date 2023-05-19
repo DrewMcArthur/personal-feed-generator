@@ -33,7 +33,6 @@ export default class ContentEmbedder {
             input: processed,
         });
 
-        // Extract the embedding from the response
         const embedding: number[] = response.data.data[0].embedding;
         return embedding
     }

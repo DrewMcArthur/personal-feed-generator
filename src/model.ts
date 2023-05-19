@@ -2,49 +2,84 @@ import { CreateOp } from './util/subscription'
 import { Record as PostRecord } from './lexicon/types/app/bsky/feed/post'
 import { Like as DbLike } from './db/schema'
 import { Database } from './db';
-import { NeuralNetwork } from 'brain.js';
 import ContentEmbedder from './content-embedder';
+import { Sequential, Tensor, initializers, layers, sequential, tensor, tensor2d } from '@tensorflow/tfjs-node';
 
 /// an ML model that scores posts based on the likelihood that the user will like it.
 export default class Model {
     db: Database
-    nn: NeuralNetwork<number[], number[]>
+    nn: Sequential
     embedder: ContentEmbedder
 
     constructor(db) {
-        this.nn = new NeuralNetwork({
-            activation: 'sigmoid',
-            hiddenLayers: [192, 12],
-        })
+        this.nn = this._setupModel()
+
         this.embedder = new ContentEmbedder()
         this.db = db
     }
 
+    _setupModel(): Sequential {
+        const initializerConfig = {
+            minval: -0.05,
+            maxval: 0.05
+        }
+
+        let model = sequential({
+            layers: [
+                layers.dense({
+                    inputShape: [1536], units: 192, activation: 'sigmoid',
+                    kernelInitializer: initializers.randomUniform(initializerConfig),
+                    biasInitializer: initializers.randomUniform(initializerConfig)
+                }),
+                layers.dense({
+                    units: 12, activation: 'sigmoid',
+                    kernelInitializer: initializers.randomUniform(initializerConfig),
+                    biasInitializer: initializers.randomUniform(initializerConfig)
+                }),
+                layers.dense({
+                    units: 1, activation: 'linear',
+                    kernelInitializer: initializers.randomUniform(initializerConfig),
+                    biasInitializer: initializers.randomUniform(initializerConfig)
+                }),
+            ]
+
+        })
+
+        model.compile({
+            loss: 'meanSquaredError',
+            optimizer: 'adam',
+            metrics: ['mae']
+        })
+
+        return model
+    }
+
     async train() {
+        console.debug('Training model...')
         const likes: DbLike[] = await this.db
             .selectFrom('like')
             .selectAll()
             .where('trainedOn', '=', false)
             .execute()
 
-        const trainingData = await Promise.all(
-            likes.map(async (like): Promise<TrainData> => {
-                const content = await this._getLikedPost(like)
+        const trainingInput = likes.map(async (like): Promise<number[]> => {
+            const content = await this._getLikedPost(like)
+            return await this.embedder.embed(content)
+        })
 
-                return {
-                    input: await this.embedder.embed(content),
-                    output: [1.0],
-                }
-            })
-        )
-
-        this.nn.train(trainingData)
+        trainingInput.forEach(async (inpt) => {
+            await this.nn.fit(tensor(await inpt), tensor([1.0]))
+        })
 
         await this.db.updateTable('like').set({ 'trainedOn': true }).where('trainedOn', '=', false).execute()
     }
 
     async score(post: CreateOp<PostRecord>): Promise<number> {
-        return this.nn.run(await this.embedder.embed(post.record.text))[0];
+        const embedding = await this.embedder.embed(post.record.text)
+        const inpt = tensor2d(embedding, [1, 1536])
+        const out = this.nn.predict(inpt) as Tensor
+        const score = out.dataSync()[0]
+        return score
     }
 
     async _getLikedPost(like: DbLike): Promise<string> {

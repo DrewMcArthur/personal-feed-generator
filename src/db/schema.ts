@@ -11,6 +11,7 @@ export type Post = {
   uri: string
   cid: string
   text: string
+  // embedding: number[] TODO: store embeddings so we aren't duplicating our openai calls on training
   replyParent: string | null
   replyRoot: string | null
   indexedAt: string
