@@ -46,10 +46,7 @@ export default class Model {
     }
 
     async _generateEmbeddings(content: string): Promise<number[]> {
-        const embeddings: number[][] = await this.embedder.embed(content)
-        let nnInput: number[] = []
-        embeddings.forEach(e => e.forEach(v => nnInput.push(v)))
-        return nnInput
+        return await this.embedder.embed(content)
     }
 
     async _getLikedPost(like: DbLike): Promise<string> {
