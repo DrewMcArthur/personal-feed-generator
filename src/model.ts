@@ -42,12 +42,14 @@ export default class Model {
     }
 
     async score(post: CreateOp<PostRecord>): Promise<number> {
-        return this.nn.forward(await this._generateEmbeddings(post.record.text))
+        return this.nn.forward(await this._generateEmbeddings(post.record.text));
     }
 
     async _generateEmbeddings(content: string): Promise<number[]> {
-        // TODO: should return an array of embeddings for a given post's content
-        return await this.embedder.embed(content)
+        const embeddings: number[][] = await this.embedder.embed(content)
+        let nnInput: number[] = []
+        embeddings.forEach(e => e.forEach(v => nnInput.push(v)))
+        return nnInput
     }
 
     async _getLikedPost(like: DbLike): Promise<string> {
