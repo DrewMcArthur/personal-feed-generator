@@ -22,30 +22,36 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   async handleEvent(evt: RepoEvent) {
     if (!isCommit(evt)) return
     const ops = await getOpsByType(evt)
+    ops.likes.creates.map(l => console.log(l))
 
     const likesToTrainOn = ops.likes.creates.filter((like) => like.author === this.userDid)
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
-    const postsToCreate = ops.posts.creates
-      .map((create) => {
-        return {
-          post: create,
-          score: this.model.score(create)
-        }
-      })
-      .filter((create) => {
-        // only index 10% of posts randomly for now
-        return create.score > 0.8
-      })
-      .map((create) => {
-        return {
-          uri: create.post.uri,
-          cid: create.post.cid,
-          replyParent: create.post.record?.reply?.parent.uri ?? null,
-          replyRoot: create.post.record?.reply?.root.uri ?? null,
-          indexedAt: new Date().toISOString(),
-          score: create.score
-        }
-      })
+    const postsToCreate = await Promise.all(
+      ops.posts.creates
+        .map(async (create) => {
+          return {
+            post: create,
+            score: await this.model.score(create)
+          }
+        })
+        .filter(async (create) => {
+          // only index top 20% of posts randomly for now
+          let { score } = await create
+          return score > 0.8
+        })
+        .map(async (create) => {
+          let { post, score } = await create
+          return {
+            uri: post.uri,
+            cid: post.cid,
+            text: post.record.text,
+            replyParent: post.record?.reply?.parent.uri ?? null,
+            replyRoot: post.record?.reply?.root.uri ?? null,
+            indexedAt: new Date().toISOString(),
+            score: score
+          }
+        })
+    )
 
     if (likesToTrainOn.length > 0) {
       await this.db
@@ -79,19 +85,18 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
       this._clearCache();
   }
 
-  _clearCache()
-  {
+  _clearCache() {
     let threshold = new Date()
     const newMinutes = threshold.getMinutes() - this.cacheTtlMin
     console.log("clearing cache", newMinutes)
     threshold.setMinutes(newMinutes)
 
     this.db.deleteFrom('post')
-        .where('indexedAt', '<', threshold.toISOString())
-        .execute()
+      .where('indexedAt', '<', threshold.toISOString())
+      .execute()
     this.db.deleteFrom('like')
-        .where('indexedAt', '<', threshold.toISOString())
-        .execute()
+      .where('indexedAt', '<', threshold.toISOString())
+      .execute()
 
     this.cacheClearedAt = new Date();
   }
