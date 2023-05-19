@@ -2,19 +2,22 @@ import { CreateOp } from './util/subscription'
 import { Record as PostRecord } from './lexicon/types/app/bsky/feed/post'
 import { Like as DbLike } from './db/schema'
 import { Database } from './db';
-import NeuralNet, { TrainData } from './nn';
+import { NeuralNetwork } from 'brain.js';
 import ContentEmbedder from './content-embedder';
 
 /// an ML model that scores posts based on the likelihood that the user will like it.
 export default class Model {
     db: Database
-    nn: NeuralNet
+    nn: NeuralNetwork<number[], number[]>
     embedder: ContentEmbedder
 
     constructor(db) {
-        this.db = db
-        this.nn = new NeuralNet()
+        this.nn = new NeuralNetwork({
+            activation: 'sigmoid',
+            hiddenLayers: [192, 12],
+        })
         this.embedder = new ContentEmbedder()
+        this.db = db
     }
 
     async train() {
@@ -29,24 +32,19 @@ export default class Model {
                 const content = await this._getLikedPost(like)
 
                 return {
-                    // todo: get the embeddings from the liked post
-                    input: await this._generateEmbeddings(content),
-                    output: 1.0
+                    input: await this.embedder.embed(content),
+                    output: [1.0],
                 }
             })
         )
 
-        trainingData.forEach(this.nn.backward)
+        this.nn.train(trainingData)
 
         await this.db.updateTable('like').set({ 'trainedOn': true }).where('trainedOn', '=', false).execute()
     }
 
     async score(post: CreateOp<PostRecord>): Promise<number> {
-        return this.nn.forward(await this._generateEmbeddings(post.record.text));
-    }
-
-    async _generateEmbeddings(content: string): Promise<number[]> {
-        return await this.embedder.embed(content)
+        return this.nn.run(await this.embedder.embed(post.record.text))[0];
     }
 
     async _getLikedPost(like: DbLike): Promise<string> {
@@ -75,4 +73,9 @@ export function loadModel(db: Database): Model {
 export type NewScoredPost = {
     post: CreateOp<PostRecord>
     score: number
+}
+
+type TrainData = {
+    input: number[],
+    output: number[],
 }

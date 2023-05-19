@@ -1,5 +1,5 @@
 import { WordTokenizer } from 'natural'
-import openai, { Configuration, OpenAIApi } from 'openai'
+import { Configuration, OpenAIApi } from 'openai'
 import dotenv from 'dotenv'
 
 // a class handling embedding post contents
@@ -12,7 +12,7 @@ export default class ContentEmbedder {
         this._initOpenAI()
     }
 
-    _initOpenAI() {
+    private _initOpenAI() {
         dotenv.config()
         const key = process.env.OPENAI_API_KEY
         if (!key) {
@@ -38,13 +38,13 @@ export default class ContentEmbedder {
         return embedding
     }
 
-    preprocess(content: string): string {
+    private preprocess(content: string): string {
         content = content.replace(/https?:\/\/[^\s]+/g, '')
         content = this.tokenize(content).join(" ")
         return content.toLowerCase()
     }
 
-    tokenize(s: string): string[] {
+    private tokenize(s: string): string[] {
         const tokens = this.tokenizer.tokenize(s)
         if (tokens === null) {
             throw new Error(`Tokenizer failed on string: ${s}`)
