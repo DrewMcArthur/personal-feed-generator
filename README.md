@@ -4,14 +4,30 @@ Forked from bluesky-social/feed-generator
 
 Goal is to provide a personalized feed generator server, that sends the requesting user posts that they're likely to like.
 
+TODO:
+
+- [ ] restrict access to just my DID
+- [ ] enable multiple users
+- [ ] categorize users to allow for similar models
+
 ## general architecture
 
 - `subscription.ts`
-  - contains the indexing service, which listens to the "firehose" of new events & scores posts according to the server's internal model
-- `feed-generation.ts`
-  - contains the request handler, which returns 20 high-scoring (i.e. high likelihood of being liked) posts
-- `learning.ts`
+  - contains the indexing service, which listens to the "firehose" of new events
+  - saves embeddings of posts & scores posts according to the server's internal (per-user) model
+- `algos/personalized-prediction.ts`
+  - contains the request handler, which returns high-scoring (i.e. high likelihood of being liked) posts
+- `model.ts`
   - contains the code hosting an ML model that continuously learns to better predict what the user will like.
+  - `score(embedding: number[]): number` takes a 1536-length float vector (what you get from openai) and returns a -1 to 1 score
+  - `train({input: number[], output: number})` takes an embedding and a score to run `model.fit` on.
+  - uses tensorflow's sequential model under the hood, four layers of size `[1536, 196, 12, 1]`
+- `content-embedder.ts`
+  - uses the openai API to embed the text of a post
+  - `embed(content: string): number[]` takes a string, and returns a 1536-long float vector that represents the text
+- `db/schema.ts` and `db/migrations.ts` define the database
+  - `post` stores posts, metadata, including embeddings and scores
+  - `like` stores like actions for tracked users, to be used for batched training runs
 
 # ATProto Feed Generator
 
