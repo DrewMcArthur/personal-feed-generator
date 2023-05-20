@@ -82,9 +82,13 @@ export default class Model {
         return score
     }
 
-    async _getLikedPost(like: DbLike): Promise<string> {
+    async embed(post: CreateOp<PostRecord>): Promise<number[]> {
+        return await this.embedder.embed(post.record.text)
+    }
+
+    private async _getLikedPost(like: DbLike): Promise<string> {
         // TODO: we should fetch the content from the uri, rather than hoping we have it cached
-        const uri = like.record.subject.uri
+        const uri = like.postUri
         const res = await this.db
             .selectFrom('post')
             .select('text')

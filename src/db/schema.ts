@@ -11,7 +11,7 @@ export type Post = {
   uri: string
   cid: string
   text: string
-  // embedding: number[] TODO: store embeddings so we aren't duplicating our openai calls on training
+  embedding: string // JSON {embeddings: number[]}
   replyParent: string | null
   replyRoot: string | null
   indexedAt: string
@@ -23,7 +23,10 @@ export type SubState = {
   cursor: number
 }
 
-export type Like = CreateOp<LikeRecord> & {
+export type Like = {
+  author: string
+  postUri: string
+  postCid: string
   indexedAt: string
   trainedOn: boolean
 }

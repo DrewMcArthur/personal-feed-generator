@@ -28,7 +28,7 @@ const run = async () => {
   const description = 'A personalized algorithm that learns from your likes'
 
   // (Optional) The path to an image to be used as your feed's avatar
-  // Ex: ~/path/to/avatar.jpeg
+  // Ex: ~/path/to/avatar.jpeg TODO
   const avatar: string = ''
 
   // -------------------------------------

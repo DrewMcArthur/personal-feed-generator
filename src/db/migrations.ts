@@ -15,7 +15,7 @@ migrations['001'] = {
       .addColumn('uri', 'varchar', (col) => col.primaryKey())
       .addColumn('cid', 'varchar', (col) => col.notNull())
       .addColumn('text', 'varchar', (col) => col.notNull())
-      .addColumn('embedding', 'varchar', (col) => col.notNull())
+      .addColumn('embedding', 'json', (col) => col.notNull())
       .addColumn('replyParent', 'varchar')
       .addColumn('replyRoot', 'varchar')
       .addColumn('indexedAt', 'varchar', (col) => col.notNull())
@@ -28,14 +28,14 @@ migrations['001'] = {
       .addColumn('cursor', 'integer', (col) => col.notNull())
       .execute()
 
-    // TODO: this isn't quite right
     await db.schema
       .createTable('like')
-      .addColumn('uri', 'varchar', (col) => col.primaryKey())
-      .addColumn('cid', 'varchar', (col) => col.notNull())
-      .addColumn('likedPost', 'varchar', (col) => col.notNull())
+      .addColumn('id', 'varchar', (col) => col.primaryKey())
+      .addColumn('postUri', 'varchar', (col) => col.notNull().references('post.uri').onDelete('no action'))
+      .addColumn('postCid', 'varchar', (col) => col.notNull().references('post.cid').onDelete('no action'))
+      .addColumn('author', 'varchar', (col) => col.notNull())
       .addColumn('indexedAt', 'varchar', (col) => col.notNull())
-      .addColumn('trainedOn', 'boolean', (col) => col.notNull())
+      .addColumn('trainedOn', 'boolean', (col) => col.defaultTo(false))
       .execute()
   },
   async down(db: Kysely<unknown>) {

@@ -2,7 +2,7 @@ import {
   OutputSchema as RepoEvent,
   isCommit,
 } from './lexicon/types/com/atproto/sync/subscribeRepos'
-import Model, { loadModel } from './model';
+import Model, { NewScoredPost, loadModel } from './model';
 import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
 
 export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
@@ -36,19 +36,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
         .filter(async (create) => {
           // only index top 20% of posts randomly for now
           let { score } = await create
-          return score && score !== undefined && score > 0.8
-        })
-        .map(async (create) => {
-          let { post, score } = await create
-          return {
-            uri: post.uri,
-            cid: post.cid,
-            text: post.record.text,
-            replyParent: post.record?.reply?.parent.uri ?? null,
-            replyRoot: post.record?.reply?.root.uri ?? null,
-            indexedAt: new Date().toISOString(),
-            score: score
-          }
+          return score > 0.5
         })
     )
 
@@ -57,7 +45,9 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
       await this.db
         .insertInto('like')
         .values(likesToTrainOn.map(like => ({
-          ...like,
+          postUri: like.record.subject.uri,
+          postCid: like.record.subject.cid,
+          author: like.author,
           indexedAt: new Date().toISOString(),
           trainedOn: false
         })))
@@ -73,10 +63,25 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     }
 
     if (postsToCreate.length > 0) {
-      console.debug("indexing posts with scores: ", postsToCreate.map((p) => p.score))
+      const values = await Promise.all(
+        postsToCreate.map(async (create) => {
+          let { post, score } = await create
+          return {
+            uri: post.uri,
+            cid: post.cid,
+            text: post.record.text,
+            embedding: JSON.stringify({ embeddings: await this.model.embed(post) }),
+            replyParent: post.record?.reply?.parent.uri ?? null,
+            replyRoot: post.record?.reply?.root.uri ?? null,
+            indexedAt: new Date().toISOString(),
+            score: score
+          }
+        })
+      )
+
       await this.db
         .insertInto('post')
-        .values(postsToCreate)
+        .values(values)
         .onConflict((oc) => oc.doNothing())
         .execute()
     }
