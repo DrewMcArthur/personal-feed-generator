@@ -27,10 +27,9 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     const tasks = [
       this._handleLikes(ops.likes),
       this._handleDeletedPosts(ops.posts.deletes),
-      this._handleCreatedPosts(ops.posts.creates)
+      this._handleCreatedPosts(ops.posts.creates),
+      this._clearCache()
     ]
-    if (new Date().getMinutes() - this.cacheClearedAt.getMinutes() > this.cacheTtlMin)
-      this._clearCache();
     await Promise.all(tasks)
   }
 
@@ -101,17 +100,22 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     }
   }
 
-  _clearCache() {
-    let threshold = new Date()
-    const newMinutes = threshold.getMinutes() - this.cacheTtlMin
-    console.debug("clearing cache", newMinutes)
-    threshold.setMinutes(newMinutes)
+  async _clearCache(): Promise<void> {
+    // TODO: update logic for how often to clear the cache
+    if (new Date().getMinutes() - this.cacheClearedAt.getMinutes() < this.cacheTtlMin)
+      return
 
-    this.db.deleteFrom('post')
+    let threshold = new Date()
+    const newHours = threshold.getHours() - (this.cacheTtlMin * 60)
+    console.debug("clearing cache", newHours)
+    threshold.setHours(newHours)
+
+    await this.db.deleteFrom('post')
       .where('indexedAt', '<', threshold.toISOString())
       .execute()
-    this.db.deleteFrom('like')
-      .where('indexedAt', '<', threshold.toISOString())
+
+    await this.db.deleteFrom('like')
+      .where('trainedOn', 'is', true)
       .execute()
 
     this.cacheClearedAt = new Date();
