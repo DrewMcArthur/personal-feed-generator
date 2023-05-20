@@ -4,23 +4,15 @@ import { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
 
 export const uri = 'at://did:example:alice/app.bsky.feed.generator/personalized'
 export const handler = async (ctx: AppContext, params: QueryParams) => {
-    /**
-     * Example of how to check auth if giving user-specific results:
-     */
-    // const requesterDid = await validateAuth(
-    //   req,
-    //   ctx.cfg.serviceDid,
-    //   ctx.didResolver,
-    // )
-    // console.log('request came from ', requesterDid)
+    console.log('request came from ', ctx.cfg.requesterDid)
 
     let builder = ctx.db
         .selectFrom('post')
         .selectAll()
         // .orderBy('cid', 'desc')
+        // .orderBy('indexedAt', 'desc')
         .orderBy('score', 'desc')
         .limit(params.limit)
-    // .orderBy('indexedAt', 'desc')
 
     if (params.cursor) {
         const [indexedAt, cid] = params.cursor.split('::')

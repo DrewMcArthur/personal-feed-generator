@@ -29,7 +29,7 @@ const run = async () => {
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
-  const avatar: string = 'icons/personalized-predictor.drawio.png'
+  const avatar: string = 'icons/predicted-likes.svg'
 
   // -------------------------------------
   // NO NEED TO TOUCH ANYTHING BELOW HERE

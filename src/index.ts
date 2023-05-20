@@ -14,7 +14,7 @@ const run = async () => {
       'wss://bsky.social',
     hostname,
     serviceDid,
-    userDid: maybeStr(process.env.MY_DID) ?? 'did:example:alice',
+    requesterDid: maybeStr(process.env.MY_DID) ?? 'did:example:alice',
   })
   await server.start()
   console.log(

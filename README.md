@@ -1,14 +1,18 @@
-# Personalized Feed Generator
+# Predicted Likes, A Personalied Feed Generator
 
-Forked from bluesky-social/feed-generator
-
-Goal is to provide a personalized feed generator server, that sends the requesting user posts that they're likely to like.
+The goal here is to provide a personalized feed generator server, that sends the requesting user posts that they're likely to like.
 
 TODO:
 
 - [ ] restrict access to just my DID
-- [ ] enable multiple users
+- [ ] fine tune the time threshold of posts returned - last day? last hour?
+- [ ] tweak how many posts are embedded and saved
+  - some random ratio of the firehose, maybe with overrides like following or in network?
+- [ ] tweak how long cache of scores and embeds are saved
+- [ ] enable multiple users (Map<DID, NN>)
 - [ ] categorize users to allow for similar models
+  - small classification model to put users into buckets
+  - then larger model that takes userBucket + postContent to predict like-likelihood
 
 ## general architecture
 

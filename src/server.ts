@@ -32,7 +32,7 @@ export class FeedGenerator {
   static create(cfg: Config) {
     const app = express()
     const db = createDb(cfg.sqliteLocation)
-    const firehose = new PersonalizedFirehoseSubscription(db, cfg.subscriptionEndpoint, cfg.userDid)
+    const firehose = new PersonalizedFirehoseSubscription(db, cfg.subscriptionEndpoint, cfg.requesterDid)
 
     const didCache = new MemoryCache()
     const didResolver = new DidResolver(
