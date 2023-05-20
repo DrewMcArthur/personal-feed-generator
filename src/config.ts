@@ -13,5 +13,5 @@ export type Config = {
   sqliteLocation: string
   subscriptionEndpoint: string
   serviceDid: string
-  requesterDid: string
+  requesterDid?: string
 }

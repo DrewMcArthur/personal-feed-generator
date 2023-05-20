@@ -14,6 +14,8 @@ export default function (server: Server, ctx: AppContext) {
       )
     }
 
+    // todo this overwrites the did from the .env.  
+    // need to differentiate between requester and which DIDs the server is setup for
     ctx.cfg.requesterDid = await validateAuth(
       req,
       ctx.cfg.serviceDid,
