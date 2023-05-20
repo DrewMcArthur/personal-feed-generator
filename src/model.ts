@@ -62,10 +62,9 @@ export default class Model {
             .where('trainedOn', '=', false)
             .execute()
 
-        const trainingInput = likes.map(async (like): Promise<number[]> => {
-            const content = await this._getLikedPost(like)
-            return await this.embedder.embed(content)
-        })
+        const trainingInput = await Promise.all(
+            likes.map(this._getLikedPostEmbedding)
+        )
 
         trainingInput.forEach(async (inpt) => {
             await this.nn.fit(tensor(await inpt), tensor([1.0]))
@@ -74,34 +73,35 @@ export default class Model {
         await this.db.updateTable('like').set({ 'trainedOn': true }).where('trainedOn', '=', false).execute()
     }
 
-    async score(post: CreateOp<PostRecord>): Promise<number> {
-        const embedding = await this.embedder.embed(post.record.text)
+    async score(embedding: number[]): Promise<number> {
         const inpt = tensor2d(embedding, [1, 1536])
         const out = this.nn.predict(inpt) as Tensor
         const score = out.dataSync()[0]
         return score
     }
 
-    async embed(post: CreateOp<PostRecord>): Promise<number[]> {
-        return await this.embedder.embed(post.record.text)
+    async embed(content: string): Promise<number[]> {
+        return await this.embedder.embed(content)
     }
 
-    private async _getLikedPost(like: DbLike): Promise<string> {
-        // TODO: we should fetch the content from the uri, rather than hoping we have it cached
-        const uri = like.postUri
+    private async _getLikedPostEmbedding(like: DbLike): Promise<number[]> {
         const res = await this.db
             .selectFrom('post')
-            .select('text')
-            .where('uri', '=', uri)
+            .select('embedding')
+            .where('uri', '=', like.postUri)
             .execute()
+
         if (res.length !== 1) {
-            throw new Error(`Expected 1 post but got ${res.length} for uri ${uri}`)
+            throw new Error(`Expected 1 post but got ${res.length} for uri ${like.postUri}`)
         }
-        const text = res.map(r => r.text).at(0)
-        if (text === undefined) {
-            throw new Error(`Got undefined text for uri ${uri}`)
+
+        const out = res.map(r => r.embedding).at(0)
+
+        if (out === undefined) {
+            throw new Error(`Got undefined text for uri ${like.postUri}`)
         }
-        return text
+
+        return JSON.parse(out) as number[]
     }
 }
 
@@ -112,9 +112,10 @@ export function loadModel(db: Database): Model {
 export type NewScoredPost = {
     post: CreateOp<PostRecord>
     score: number
+    embedding: number[]
 }
 
-type TrainData = {
-    input: number[],
-    output: number[],
+export type EmbeddedPost = {
+    post: CreateOp<PostRecord>
+    embedding: number[]
 }

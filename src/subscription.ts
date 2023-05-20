@@ -2,8 +2,10 @@ import {
   OutputSchema as RepoEvent,
   isCommit,
 } from './lexicon/types/com/atproto/sync/subscribeRepos'
-import Model, { NewScoredPost, loadModel } from './model';
-import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
+import Model, { loadModel } from './model';
+import { Record as PostRecord } from './lexicon/types/app/bsky/feed/post'
+import { Record as LikeRecord } from './lexicon/types/app/bsky/feed/like'
+import { CreateOp, DeleteOp, FirehoseSubscriptionBase, Operations, OperationsByType, getOpsByType } from './util/subscription'
 
 export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   model: Model
@@ -21,24 +23,57 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
 
   async handleEvent(evt: RepoEvent) {
     if (!isCommit(evt)) return
-    const ops = await getOpsByType(evt)
+    const ops: OperationsByType = await getOpsByType(evt)
+    const tasks = [
+      this._handleLikes(ops.likes),
+      this._handleDeletedPosts(ops.posts.deletes),
+      this._handleCreatedPosts(ops.posts.creates)
+    ]
+    if (new Date().getMinutes() - this.cacheClearedAt.getMinutes() > this.cacheTtlMin)
+      this._clearCache();
+    await Promise.all(tasks)
+  }
 
-    const likesToTrainOn = ops.likes.creates.filter((like) => like.author === this.userDid)
-    const postsToDelete = ops.posts.deletes.map((del) => del.uri)
-    const postsToCreate = await Promise.all(
-      ops.posts.creates
-        .map(async (create) => {
+  async _handleCreatedPosts(creates: CreateOp<PostRecord>[]) {
+    const values = await Promise.all(
+      creates
+        .map(async (row) => ({
+          post: row,
+          embedding: await this.model.embed(row.record.text)
+        }))
+        .map(async (row) => {
+          const { post, embedding } = await row
           return {
-            post: create,
-            score: await this.model.score(create)
+            post,
+            embedding,
+            score: await this.model.score(embedding)
           }
         })
-        .filter(async (create) => {
-          // only index top 20% of posts randomly for now
-          let { score } = await create
-          return score > 0.5
+        .map(async (row) => {
+          let { post, score, embedding } = await row
+          return {
+            uri: post.uri,
+            cid: post.cid,
+            text: post.record.text,
+            embedding: JSON.stringify(embedding),
+            replyParent: post.record?.reply?.parent.uri ?? null,
+            replyRoot: post.record?.reply?.root.uri ?? null,
+            indexedAt: new Date().toISOString(),
+            score: score
+          }
         })
     )
+
+    await this.db
+      .insertInto('post')
+      .values(values)
+      .onConflict((oc) => oc.doNothing())
+      .execute()
+  }
+
+
+  async _handleLikes(likes: Operations<LikeRecord>) {
+    const likesToTrainOn = likes.creates.filter((like) => like.author === this.userDid)
 
     if (likesToTrainOn.length > 0) {
       console.debug('found %d likes to train on', likesToTrainOn.length)
@@ -54,40 +89,16 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
         .onConflict((oc) => oc.doNothing())
         .execute()
     }
+  }
 
+  async _handleDeletedPosts(deletes: DeleteOp[]) {
+    const postsToDelete = deletes.map((del) => del.uri)
     if (postsToDelete.length > 0) {
       await this.db
         .deleteFrom('post')
         .where('uri', 'in', postsToDelete)
         .execute()
     }
-
-    if (postsToCreate.length > 0) {
-      const values = await Promise.all(
-        postsToCreate.map(async (create) => {
-          let { post, score } = await create
-          return {
-            uri: post.uri,
-            cid: post.cid,
-            text: post.record.text,
-            embedding: JSON.stringify({ embeddings: await this.model.embed(post) }),
-            replyParent: post.record?.reply?.parent.uri ?? null,
-            replyRoot: post.record?.reply?.root.uri ?? null,
-            indexedAt: new Date().toISOString(),
-            score: score
-          }
-        })
-      )
-
-      await this.db
-        .insertInto('post')
-        .values(values)
-        .onConflict((oc) => oc.doNothing())
-        .execute()
-    }
-
-    if (new Date().getMinutes() - this.cacheClearedAt.getMinutes() > this.cacheTtlMin)
-      this._clearCache();
   }
 
   _clearCache() {
