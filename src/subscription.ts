@@ -63,11 +63,12 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
         })
     )
 
-    await this.db
-      .insertInto('post')
-      .values(values)
-      .onConflict((oc) => oc.doNothing())
-      .execute()
+    if (values.length > 0)
+      await this.db
+        .insertInto('post')
+        .values(values)
+        .onConflict((oc) => oc.doNothing())
+        .execute()
   }
 
 

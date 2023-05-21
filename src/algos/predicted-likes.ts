@@ -2,7 +2,7 @@ import { InvalidRequestError } from "@atproto/xrpc-server"
 import { AppContext } from "../config"
 import { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
 
-export const uri = 'at://did:example:alice/app.bsky.feed.generator/personalized'
+export const uri = 'at://did:example:alice/app.bsky.feed.generator/predicted-likes'
 export const handler = async (ctx: AppContext, params: QueryParams) => {
     console.log('request came from ', ctx.cfg.requesterDid)
 
@@ -45,3 +45,5 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
         feed,
     }
 }
+
+export default handler

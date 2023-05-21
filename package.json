@@ -1,13 +1,13 @@
 {
-  "name": "feed-generator",
+  "name": "personalized-feed-generator",
   "version": "1.0.0",
-  "description": "atproto feed generator starter kit",
+  "description": "personalized feed generator, a neural net that learns from your likes",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "repository": "git@github.com:bluesky-social/feed-generator.git",
-  "author": "dholms <dtholmgren@gmail.com>",
+  "author": "drewmca <hi@drewmca.dev>",
   "license": "MIT",
   "scripts": {
     "publishFeed": "ts-node scripts/publishFeedGen.ts",

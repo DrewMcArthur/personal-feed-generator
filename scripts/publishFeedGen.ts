@@ -25,7 +25,7 @@ const run = async () => {
 
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
-  const description = 'A personalized algorithm that learns from your likes'
+  const description = 'A personalized algorithm that learns from your (my) likes'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
@@ -42,7 +42,7 @@ const run = async () => {
     process.env.FEEDGEN_SERVICE_DID ?? `did:web:${process.env.FEEDGEN_HOSTNAME}`
 
   // only update this if in a test environment
-  const agent = new AtpAgent({ service: 'https://bsky.social' })
+  const agent = new AtpAgent({ service: process.env.BSKY_SERVER! })
   await agent.login({ identifier: handle, password })
 
   try {
@@ -60,6 +60,8 @@ const run = async () => {
       encoding = 'image/png'
     } else if (avatar.endsWith('jpg') || avatar.endsWith('jpeg')) {
       encoding = 'image/jpeg'
+    } else if (avatar.endsWith('svg')) {
+      encoding = 'image/svg+xml'
     } else {
       throw new Error('expected png or jpeg')
     }

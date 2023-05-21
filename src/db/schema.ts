@@ -1,6 +1,3 @@
-import { CreateOp } from "../util/subscription"
-import { Record as LikeRecord } from '../lexicon/types/app/bsky/feed/like'
-
 export type DatabaseSchema = {
   post: Post
   sub_state: SubState
