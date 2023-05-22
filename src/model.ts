@@ -87,10 +87,15 @@ export default class Model {
     await this.db
       .updateTable('like')
       .set({ trainedOn: true })
+      .where(
+        'postUri',
+        'in',
+        likedPostEmbeddings.map((e) => e.uri),
+      )
       .where('trainedOn', '=', false)
       .execute()
 
-    console.log(`Model trained on ${likedPostUris.length} liked posts.`)
+    console.log(`Model trained on ${likedPostEmbeddings.length} liked posts.`)
     return trainingLosses
   }
 
@@ -107,10 +112,10 @@ export default class Model {
 
   private async _getLikedPostsEmbeddings(
     postUris: string[],
-  ): Promise<number[][]> {
+  ): Promise<EmbeddedPostUri[]> {
     const res = await this.db
       .selectFrom('post')
-      .select('embedding')
+      .select(['uri', 'embedding'])
       .where('uri', 'in', postUris)
       .execute()
 
@@ -123,9 +128,15 @@ export default class Model {
     }
 
     return res
-      .map((r) => r.embedding)
-      .filter((e) => e !== null)
-      .map((e) => JSON.parse(e as string) as number[])
+      .map((r) => ({ uri: r.uri, embedding: r.embedding }))
+      .filter((p) => p.embedding !== null)
+      .map(
+        (p) =>
+          ({
+            uri: p.uri,
+            embedding: JSON.parse(p.embedding as string) as number[],
+          } as EmbeddedPostUri),
+      )
   }
 }
 
@@ -141,5 +152,10 @@ export type NewScoredPost = {
 
 export type EmbeddedPost = {
   post: CreateOp<PostRecord>
+  embedding: number[]
+}
+
+type EmbeddedPostUri = {
+  uri: string
   embedding: number[]
 }
