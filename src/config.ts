@@ -15,4 +15,5 @@ export type Config = {
   embeddingSubscriptionEndpoint: string
   serviceDid: string
   requesterDid?: string
+  cacheTtlMin: number
 }

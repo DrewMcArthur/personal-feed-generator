@@ -1,6 +1,6 @@
 import {
   OutputSchema as RepoEvent,
-  isCommit,
+  isCommit
 } from './lexicon/types/com/atproto/sync/subscribeRepos'
 import Model from './model'
 import { Record as PostRecord } from './lexicon/types/app/bsky/feed/post'
@@ -11,7 +11,7 @@ import {
   FirehoseSubscriptionBase,
   Operations,
   OperationsByType,
-  getOpsByType,
+  getOpsByType
 } from './util/subscription'
 
 export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
@@ -20,7 +20,8 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   cacheTtlMin: number
   cacheClearedAt: Date
 
-  constructor(db, endpoint: string, model: Model, cacheTtlMin: number = 15) {
+  // TODO: update cacheTtlMin
+  constructor(db, endpoint: string, model: Model, cacheTtlMin: number = 1) {
     super(db, endpoint)
     this.model = model
     this.cacheTtlMin = cacheTtlMin
@@ -35,64 +36,106 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
       this._handleCreatedPosts(ops.posts.creates),
       this._handleDeletedRecords(ops.posts.deletes, 'post'),
       this._handleDeletedRecords(ops.likes.deletes, 'like'),
-      this._cleanup(),
+      this._cleanup()
     ]
     await Promise.all(tasks)
   }
 
   async _handleCreatedPosts(creates: CreateOp<PostRecord>[]) {
     const values = await Promise.all(
-      creates.map(async (post) => {
+      creates.map(async post => {
         return {
           uri: post.uri,
           cid: post.cid,
           text: post.record.text,
           replyParent: post.record?.reply?.parent.uri ?? null,
           replyRoot: post.record?.reply?.root.uri ?? null,
-          indexedAt: new Date().toISOString(),
+          indexedAt: new Date().toISOString()
           // embedding: JSON.stringify(embedding),
           // score: score,
         }
-      }),
+      })
     )
 
     if (values.length > 0)
-      await this.db
-        .insertInto('post')
-        .values(values)
-        .onConflict((oc) => oc.doNothing())
-        .execute()
+      await new Promise((resolve, reject) =>
+        this.db
+          .insertInto('post')
+          .values(values)
+          .onConflict(oc => oc.doNothing())
+          .execute()
+          .then(resolve)
+          .catch(e =>
+            reject(new Error(`error inserting ${values.length} posts`, e))
+          )
+      )
   }
 
   async _handleLikes(likes: Operations<LikeRecord>) {
-    const likesToTrainOn = likes.creates
+    const newLikes = likes.creates
       // currently, saves all likes, but could filter by like author
       // .filter((like) => like.author === this.userDid)
-      .map((like) => ({
+      .map(like => ({
         postUri: like.record.subject.uri,
         postCid: like.record.subject.cid,
         author: like.author,
         indexedAt: new Date().toISOString(),
-        trainedOn: false,
+        trainedOn: false
       }))
+
+    const existingPostUris: string[] = await new Promise((resolve, reject) =>
+      this.db
+        .selectFrom('post')
+        .select('uri')
+        .where(
+          'uri',
+          'in',
+          newLikes.map(l => l.postUri)
+        )
+        .execute()
+        .then(rows => resolve(rows.map(row => row.uri) as string[]))
+        .catch(e => reject(new Error(`error selecting existing posts`, e)))
+    )
+
+    const likesToTrainOn = newLikes.filter(like =>
+      existingPostUris.includes(like.postUri)
+    )
 
     if (likesToTrainOn.length > 0) {
       console.debug('found %d likes to train on', likesToTrainOn.length)
-      await this.db
-        .insertInto('like')
-        .values(likesToTrainOn)
-        .onConflict((oc) => oc.doNothing())
-        .execute()
+      await new Promise((resolve, reject) =>
+        this.db
+          .insertInto('like')
+          .values(likesToTrainOn)
+          .onConflict(oc => oc.doNothing())
+          .execute()
+          .then(resolve)
+          .catch(e =>
+            reject(
+              new Error(`error inserting ${likesToTrainOn.length} likes: ${e}`)
+            )
+          )
+      )
     }
   }
 
   async _handleDeletedRecords(deletes: DeleteOp[], table: 'post' | 'like') {
-    const deletedRecordUris = deletes.map((del) => del.uri)
+    const deletedRecordUris = deletes.map(del => del.uri)
     if (deletedRecordUris.length > 0) {
-      await this.db
-        .deleteFrom(table)
-        .where('uri', 'in', deletedRecordUris)
-        .execute()
+      await new Promise((resolve, reject) =>
+        this.db
+          .deleteFrom(table)
+          .where('uri', 'in', deletedRecordUris)
+          .execute()
+          .then(resolve)
+          .catch(e =>
+            reject(
+              new Error(
+                `error deleting ${deletedRecordUris.length} records: ${e}`
+              )
+            )
+          )
+      )
     }
   }
 
@@ -100,11 +143,12 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     const minutesSinceCacheCleared =
       new Date().getMinutes() - this.cacheClearedAt.getMinutes()
     if (minutesSinceCacheCleared < this.cacheTtlMin) return
+    console.log('running cleanup, clearing cache and training model')
 
     const tasks = [
       this._deleteOldPosts(),
-      this.db.deleteFrom('like').where('trainedOn', 'is', true).execute(),
-      this.model.train(),
+      this._deleteTrainedLikes(),
+      this.model.train()
     ]
 
     await Promise.all(tasks)
@@ -118,9 +162,30 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     threshold.setHours(newHours)
 
     // delete posts older than `cacheTtlMin` minutes old
-    await this.db
-      .deleteFrom('post')
-      .where('indexedAt', '<', threshold.toISOString())
-      .execute()
+    await new Promise((resolve, reject) =>
+      this.db
+        .deleteFrom('post')
+        .where('indexedAt', '<', threshold.toISOString())
+        .execute()
+        .then(resolve)
+        .catch(
+          e => new Error(`_deleteOldPosts: error deleting old posts: ${e}`)
+        )
+    )
+  }
+
+  async _deleteTrainedLikes(): Promise<void> {
+    await new Promise((resolve, reject) =>
+      this.db
+        .deleteFrom('like')
+        .where('trainedOn', 'is', true)
+        .execute()
+        .then(resolve)
+        .catch(e =>
+          reject(
+            new Error(`_deleteTrainedLikes: error deleting trained likes: ${e}`)
+          )
+        )
+    )
   }
 }

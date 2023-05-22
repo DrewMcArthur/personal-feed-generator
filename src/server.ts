@@ -42,6 +42,7 @@ export class FeedGenerator {
       db,
       cfg.subscriptionEndpoint,
       model,
+      cfg.cacheTtlMin,
     ) // TODO: will need to move to a CONST allowed_DIDs or something
 
     const embeddingFirehose = new EmbeddingFirehoseSubscription(
