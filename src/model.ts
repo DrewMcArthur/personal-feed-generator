@@ -2,7 +2,6 @@ import { CreateOp } from './util/subscription'
 import { Record as PostRecord } from './lexicon/types/app/bsky/feed/post'
 import { Like as DbLike } from './db/schema'
 import { Database } from './db'
-import ContentEmbedder from './content-embedder'
 import {
   Sequential,
   Tensor,
@@ -17,12 +16,9 @@ import {
 export default class Model {
   db: Database
   nn: Sequential
-  embedder: ContentEmbedder
 
   constructor(db) {
     this.nn = this._setupModel()
-
-    this.embedder = new ContentEmbedder()
     this.db = db
   }
 
@@ -106,10 +102,6 @@ export default class Model {
     return score
   }
 
-  async embed(content: string): Promise<number[]> {
-    return await this.embedder.embed(content)
-  }
-
   private async _getLikedPostsEmbeddings(
     postUris: string[],
   ): Promise<EmbeddedPostUri[]> {
@@ -138,10 +130,6 @@ export default class Model {
           } as EmbeddedPostUri),
       )
   }
-}
-
-export function loadModel(db: Database): Model {
-  return new Model(db)
 }
 
 export type NewScoredPost = {

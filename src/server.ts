@@ -9,30 +9,46 @@ import { createDb, Database, migrateToLatest } from './db'
 import { PersonalizedFirehoseSubscription } from './subscription'
 import { AppContext, Config } from './config'
 import wellKnown from './well-known'
+import EmbeddingFirehoseSubscription from './embedding-subscription'
+import Model from './model'
 
 export class FeedGenerator {
   public app: express.Application
   public server?: http.Server
   public db: Database
   public firehose: PersonalizedFirehoseSubscription
+  public embeddingFirehose: EmbeddingFirehoseSubscription
   public cfg: Config
 
   constructor(
     app: express.Application,
     db: Database,
     firehose: PersonalizedFirehoseSubscription,
+    embeddingFirehose: EmbeddingFirehoseSubscription,
     cfg: Config,
   ) {
     this.app = app
     this.db = db
     this.firehose = firehose
+    this.embeddingFirehose = embeddingFirehose
     this.cfg = cfg
   }
 
   static create(cfg: Config) {
     const app = express()
     const db = createDb(cfg.sqliteLocation)
-    const firehose = new PersonalizedFirehoseSubscription(db, cfg.subscriptionEndpoint, cfg.requesterDid!) // TODO: will need to move to a CONST allowed_DIDs or something
+    const model = new Model(db)
+    const firehose = new PersonalizedFirehoseSubscription(
+      db,
+      cfg.subscriptionEndpoint,
+      model,
+    ) // TODO: will need to move to a CONST allowed_DIDs or something
+
+    const embeddingFirehose = new EmbeddingFirehoseSubscription(
+      db,
+      cfg.embeddingSubscriptionEndpoint,
+      model,
+    )
 
     const didCache = new MemoryCache()
     const didResolver = new DidResolver(
@@ -58,7 +74,7 @@ export class FeedGenerator {
     app.use(server.xrpc.router)
     app.use(wellKnown(ctx))
 
-    return new FeedGenerator(app, db, firehose, cfg)
+    return new FeedGenerator(app, db, firehose, embeddingFirehose, cfg)
   }
 
   async start(): Promise<http.Server> {

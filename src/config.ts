@@ -12,6 +12,7 @@ export type Config = {
   hostname: string
   sqliteLocation: string
   subscriptionEndpoint: string
+  embeddingSubscriptionEndpoint: string
   serviceDid: string
   requesterDid?: string
 }

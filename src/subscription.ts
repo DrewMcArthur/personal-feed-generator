@@ -2,7 +2,7 @@ import {
   OutputSchema as RepoEvent,
   isCommit,
 } from './lexicon/types/com/atproto/sync/subscribeRepos'
-import Model, { loadModel } from './model'
+import Model from './model'
 import { Record as PostRecord } from './lexicon/types/app/bsky/feed/post'
 import { Record as LikeRecord } from './lexicon/types/app/bsky/feed/like'
 import {
@@ -20,10 +20,9 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   cacheTtlMin: number
   cacheClearedAt: Date
 
-  constructor(db, endpoint: string, userDid: string, cacheTtlMin: number = 15) {
+  constructor(db, endpoint: string, model: Model, cacheTtlMin: number = 15) {
     super(db, endpoint)
-    this.model = loadModel(db)
-    this.userDid = userDid
+    this.model = model
     this.cacheTtlMin = cacheTtlMin
     this.cacheClearedAt = new Date()
   }
