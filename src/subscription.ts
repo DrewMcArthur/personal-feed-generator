@@ -13,6 +13,8 @@ import {
   OperationsByType,
   getOpsByType,
 } from './util/subscription'
+import { TableReference } from 'kysely/dist/cjs/parser/table-parser'
+import { DatabaseSchema } from './db/schema'
 
 export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   model: Model
@@ -20,7 +22,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   cacheTtlMin: number
   cacheClearedAt: Date
 
-  constructor(db, endpoint: string, userDid: string, cacheTtlMin: number = 10) {
+  constructor(db, endpoint: string, userDid: string, cacheTtlMin: number = 15) {
     super(db, endpoint)
     this.model = loadModel(db)
     this.userDid = userDid
@@ -33,8 +35,9 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     const ops: OperationsByType = await getOpsByType(evt)
     const tasks = [
       this._handleLikes(ops.likes),
-      this._handleDeletedPosts(ops.posts.deletes),
       this._handleCreatedPosts(ops.posts.creates),
+      this._handleDeletedRecords(ops.posts.deletes, 'post'),
+      this._handleDeletedRecords(ops.likes.deletes, 'like'),
       this._clearCache(),
     ]
     await Promise.all(tasks)
@@ -80,6 +83,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
 
   async _handleLikes(likes: Operations<LikeRecord>) {
     const likesToTrainOn = likes.creates
+      // currently, saves all likes, but could filter by like author
       // .filter((like) => like.author === this.userDid)
       .map((like) => ({
         postUri: like.record.subject.uri,
@@ -99,34 +103,33 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     }
   }
 
-  async _handleDeletedPosts(deletes: DeleteOp[]) {
-    const postsToDelete = deletes.map((del) => del.uri)
-    if (postsToDelete.length > 0) {
+  async _handleDeletedRecords(deletes: DeleteOp[], table: 'post' | 'like') {
+    const deletedRecordUris = deletes.map((del) => del.uri)
+    if (deletedRecordUris.length > 0) {
       await this.db
-        .deleteFrom('post')
-        .where('uri', 'in', postsToDelete)
+        .deleteFrom(table)
+        .where('uri', 'in', deletedRecordUris)
         .execute()
     }
   }
 
   async _clearCache(): Promise<void> {
-    // TODO: update logic for how often to clear the cache
-    if (
-      new Date().getMinutes() - this.cacheClearedAt.getMinutes() <
-      this.cacheTtlMin
-    )
-      return
+    const minutesSinceCacheCleared =
+      new Date().getMinutes() - this.cacheClearedAt.getMinutes()
+    if (minutesSinceCacheCleared < this.cacheTtlMin) return
 
     let threshold = new Date()
     const newHours = threshold.getHours() - this.cacheTtlMin * 60
     console.debug('clearing cache', newHours)
     threshold.setHours(newHours)
 
+    // delete posts older than `cacheTtlMin` minutes old
     await this.db
       .deleteFrom('post')
       .where('indexedAt', '<', threshold.toISOString())
       .execute()
 
+    // and any likes we already trained on
     await this.db.deleteFrom('like').where('trainedOn', 'is', true).execute()
 
     this.cacheClearedAt = new Date()
