@@ -4,6 +4,10 @@ The goal here is to provide a personalized feed generator server, that sends the
 
 TODO:
 
+- [ ] pull out embeddings stuff, just listen to [embedding-firehose](https://github.com/drewmcarthur/embedding-firehose) instead
+- [ ] save prediction model to file
+- [ ] train the model on general likes
+- [ ] add whitelisted users (me) that get their own personal predicted-likes model
 - [ ] restrict access to just my DID
 - [ ] fine tune the time threshold of posts returned - last day? last hour?
 - [ ] tweak how many posts are embedded and saved
