@@ -13,8 +13,6 @@ import {
   OperationsByType,
   getOpsByType,
 } from './util/subscription'
-import { TableReference } from 'kysely/dist/cjs/parser/table-parser'
-import { DatabaseSchema } from './db/schema'
 
 export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   model: Model
@@ -38,39 +36,25 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
       this._handleCreatedPosts(ops.posts.creates),
       this._handleDeletedRecords(ops.posts.deletes, 'post'),
       this._handleDeletedRecords(ops.likes.deletes, 'like'),
-      this._clearCache(),
+      this._cleanup(),
     ]
     await Promise.all(tasks)
   }
 
   async _handleCreatedPosts(creates: CreateOp<PostRecord>[]) {
     const values = await Promise.all(
-      creates
-        .map(async (row) => ({
-          post: row,
-          embedding: await this.model.embed(row.record.text),
-        }))
-        .map(async (row) => {
-          const { post, embedding } = await row
-          return {
-            post,
-            embedding,
-            score: await this.model.score(embedding),
-          }
-        })
-        .map(async (row) => {
-          let { post, score, embedding } = await row
-          return {
-            uri: post.uri,
-            cid: post.cid,
-            text: post.record.text,
-            embedding: JSON.stringify(embedding),
-            replyParent: post.record?.reply?.parent.uri ?? null,
-            replyRoot: post.record?.reply?.root.uri ?? null,
-            indexedAt: new Date().toISOString(),
-            score: score,
-          }
-        }),
+      creates.map(async (post) => {
+        return {
+          uri: post.uri,
+          cid: post.cid,
+          text: post.record.text,
+          replyParent: post.record?.reply?.parent.uri ?? null,
+          replyRoot: post.record?.reply?.root.uri ?? null,
+          indexedAt: new Date().toISOString(),
+          // embedding: JSON.stringify(embedding),
+          // score: score,
+        }
+      }),
     )
 
     if (values.length > 0)
@@ -113,11 +97,22 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     }
   }
 
-  async _clearCache(): Promise<void> {
+  async _cleanup(): Promise<void> {
     const minutesSinceCacheCleared =
       new Date().getMinutes() - this.cacheClearedAt.getMinutes()
     if (minutesSinceCacheCleared < this.cacheTtlMin) return
 
+    const tasks = [
+      this._deleteOldPosts(),
+      this.db.deleteFrom('like').where('trainedOn', 'is', true).execute(),
+      this.model.train(),
+    ]
+
+    await Promise.all(tasks)
+    this.cacheClearedAt = new Date()
+  }
+
+  async _deleteOldPosts(): Promise<void> {
     let threshold = new Date()
     const newHours = threshold.getHours() - this.cacheTtlMin * 60
     console.debug('clearing cache', newHours)
@@ -128,10 +123,5 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
       .deleteFrom('post')
       .where('indexedAt', '<', threshold.toISOString())
       .execute()
-
-    // and any likes we already trained on
-    await this.db.deleteFrom('like').where('trainedOn', 'is', true).execute()
-
-    this.cacheClearedAt = new Date()
   }
 }

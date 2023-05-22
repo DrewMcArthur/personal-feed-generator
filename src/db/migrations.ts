@@ -15,11 +15,11 @@ migrations['001'] = {
       .addColumn('uri', 'varchar', (col) => col.primaryKey())
       .addColumn('cid', 'varchar', (col) => col.notNull())
       .addColumn('text', 'varchar', (col) => col.notNull())
-      .addColumn('embedding', 'json', (col) => col.notNull())
       .addColumn('replyParent', 'varchar')
       .addColumn('replyRoot', 'varchar')
       .addColumn('indexedAt', 'varchar', (col) => col.notNull())
-      .addColumn('score', 'real', (col) => col.notNull())
+      .addColumn('embedding', 'json')
+      .addColumn('score', 'real')
       .execute()
 
     await db.schema
@@ -31,8 +31,12 @@ migrations['001'] = {
     await db.schema
       .createTable('like')
       .addColumn('id', 'varchar', (col) => col.primaryKey())
-      .addColumn('postUri', 'varchar', (col) => col.notNull().references('post.uri').onDelete('no action'))
-      .addColumn('postCid', 'varchar', (col) => col.notNull().references('post.cid').onDelete('no action'))
+      .addColumn('postUri', 'varchar', (col) =>
+        col.notNull().references('post.uri').onDelete('no action'),
+      )
+      .addColumn('postCid', 'varchar', (col) =>
+        col.notNull().references('post.cid').onDelete('no action'),
+      )
       .addColumn('author', 'varchar', (col) => col.notNull())
       .addColumn('indexedAt', 'varchar', (col) => col.notNull())
       .addColumn('trainedOn', 'boolean', (col) => col.defaultTo(false))

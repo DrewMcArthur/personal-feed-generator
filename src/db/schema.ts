@@ -8,11 +8,11 @@ export type Post = {
   uri: string
   cid: string
   text: string
-  embedding: string // JSON {embeddings: number[]}
+  embedding: string | null // JSON {embeddings: number[]}
   replyParent: string | null
   replyRoot: string | null
   indexedAt: string
-  score: number
+  score: number | null
 }
 
 export type SubState = {
