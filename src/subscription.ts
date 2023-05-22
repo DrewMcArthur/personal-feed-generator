@@ -2,23 +2,30 @@ import {
   OutputSchema as RepoEvent,
   isCommit,
 } from './lexicon/types/com/atproto/sync/subscribeRepos'
-import Model, { loadModel } from './model';
+import Model, { loadModel } from './model'
 import { Record as PostRecord } from './lexicon/types/app/bsky/feed/post'
 import { Record as LikeRecord } from './lexicon/types/app/bsky/feed/like'
-import { CreateOp, DeleteOp, FirehoseSubscriptionBase, Operations, OperationsByType, getOpsByType } from './util/subscription'
+import {
+  CreateOp,
+  DeleteOp,
+  FirehoseSubscriptionBase,
+  Operations,
+  OperationsByType,
+  getOpsByType,
+} from './util/subscription'
 
 export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   model: Model
   userDid: string
   cacheTtlMin: number
-  cacheClearedAt: Date;
+  cacheClearedAt: Date
 
   constructor(db, endpoint: string, userDid: string, cacheTtlMin: number = 10) {
     super(db, endpoint)
     this.model = loadModel(db)
     this.userDid = userDid
     this.cacheTtlMin = cacheTtlMin
-    this.cacheClearedAt = new Date();
+    this.cacheClearedAt = new Date()
   }
 
   async handleEvent(evt: RepoEvent) {
@@ -28,7 +35,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
       this._handleLikes(ops.likes),
       this._handleDeletedPosts(ops.posts.deletes),
       this._handleCreatedPosts(ops.posts.creates),
-      this._clearCache()
+      this._clearCache(),
     ]
     await Promise.all(tasks)
   }
@@ -38,14 +45,14 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
       creates
         .map(async (row) => ({
           post: row,
-          embedding: await this.model.embed(row.record.text)
+          embedding: await this.model.embed(row.record.text),
         }))
         .map(async (row) => {
           const { post, embedding } = await row
           return {
             post,
             embedding,
-            score: await this.model.score(embedding)
+            score: await this.model.score(embedding),
           }
         })
         .map(async (row) => {
@@ -58,9 +65,9 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
             replyParent: post.record?.reply?.parent.uri ?? null,
             replyRoot: post.record?.reply?.root.uri ?? null,
             indexedAt: new Date().toISOString(),
-            score: score
+            score: score,
           }
-        })
+        }),
     )
 
     if (values.length > 0)
@@ -71,21 +78,22 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
         .execute()
   }
 
-
   async _handleLikes(likes: Operations<LikeRecord>) {
-    const likesToTrainOn = likes.creates.filter((like) => like.author === this.userDid)
+    const likesToTrainOn = likes.creates
+      // .filter((like) => like.author === this.userDid)
+      .map((like) => ({
+        postUri: like.record.subject.uri,
+        postCid: like.record.subject.cid,
+        author: like.author,
+        indexedAt: new Date().toISOString(),
+        trainedOn: false,
+      }))
 
     if (likesToTrainOn.length > 0) {
       console.debug('found %d likes to train on', likesToTrainOn.length)
       await this.db
         .insertInto('like')
-        .values(likesToTrainOn.map(like => ({
-          postUri: like.record.subject.uri,
-          postCid: like.record.subject.cid,
-          author: like.author,
-          indexedAt: new Date().toISOString(),
-          trainedOn: false
-        })))
+        .values(likesToTrainOn)
         .onConflict((oc) => oc.doNothing())
         .execute()
     }
@@ -103,22 +111,24 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
 
   async _clearCache(): Promise<void> {
     // TODO: update logic for how often to clear the cache
-    if (new Date().getMinutes() - this.cacheClearedAt.getMinutes() < this.cacheTtlMin)
+    if (
+      new Date().getMinutes() - this.cacheClearedAt.getMinutes() <
+      this.cacheTtlMin
+    )
       return
 
     let threshold = new Date()
-    const newHours = threshold.getHours() - (this.cacheTtlMin * 60)
-    console.debug("clearing cache", newHours)
+    const newHours = threshold.getHours() - this.cacheTtlMin * 60
+    console.debug('clearing cache', newHours)
     threshold.setHours(newHours)
 
-    await this.db.deleteFrom('post')
+    await this.db
+      .deleteFrom('post')
       .where('indexedAt', '<', threshold.toISOString())
       .execute()
 
-    await this.db.deleteFrom('like')
-      .where('trainedOn', 'is', true)
-      .execute()
+    await this.db.deleteFrom('like').where('trainedOn', 'is', true).execute()
 
-    this.cacheClearedAt = new Date();
+    this.cacheClearedAt = new Date()
   }
 }
