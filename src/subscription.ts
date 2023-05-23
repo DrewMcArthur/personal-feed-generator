@@ -13,7 +13,7 @@ import {
   OperationsByType,
   getOpsByType
 } from './util/subscription'
-import { uri } from './algos/whats-alf'
+import { DeleteResult } from 'kysely'
 
 export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   model: Model
@@ -183,28 +183,29 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   async _deleteOldPosts(): Promise<void> {
     let threshold = new Date()
     const newHours = threshold.getHours() - this.cacheTtlMin / 60
-    console.debug('clearing cache', newHours)
     threshold.setHours(newHours)
+    console.debug('clearing cache of posts indexed before', threshold)
 
     // delete posts older than `cacheTtlMin` minutes old
-    await new Promise((resolve, reject) =>
+    const res: DeleteResult = await new Promise((resolve, reject) =>
       this.db
         .deleteFrom('post')
         .where('indexedAt', '<', threshold.toISOString())
-        .execute()
+        .executeTakeFirst()
         .then(resolve)
-        .catch(
-          e => new Error(`_deleteOldPosts: error deleting old posts: ${e}`)
+        .catch(e =>
+          reject(new Error(`_deleteOldPosts: error deleting old posts: ${e}`))
         )
     )
+    console.debug(`deleted ${res.numDeletedRows} posts.`)
   }
 
   async _deleteTrainedLikes(): Promise<void> {
-    await new Promise((resolve, reject) =>
+    const res: DeleteResult = await new Promise((resolve, reject) =>
       this.db
         .deleteFrom('like')
         .where('trainedOn', '>', 0)
-        .execute()
+        .executeTakeFirst()
         .then(resolve)
         .catch(e =>
           reject(
@@ -212,5 +213,6 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
           )
         )
     )
+    console.debug(`deleted ${res.numDeletedRows} already trained likes`)
   }
 }

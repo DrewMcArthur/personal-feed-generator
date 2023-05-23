@@ -81,6 +81,8 @@ export default class Model {
     const likedPostEmbeddings = await this._getLikedPostsEmbeddings(
       likedPostUris
     )
+    if (likedPostEmbeddings.length < 1) return
+
     const trainingLosses = await Promise.all(
       likedPostEmbeddings.map(e => {
         return this.nn.trainOnBatch(tensor(e), tensor([1.0]))
@@ -105,30 +107,28 @@ export default class Model {
   private async _getLikedPostsEmbeddings(
     postUris: string[]
   ): Promise<EmbeddedPostUri[]> {
-    const res = await this.db
-      .selectFrom('post')
-      .select(['uri', 'embedding'])
-      .where('uri', 'in', postUris)
-      .where('embedding', '!=', null)
-      .execute()
-
-    if (res.length < 1) {
-      throw new Error(
-        `Expected at least 1 post but got ${
-          res.length
-        } for uris ${postUris.join(', ')}`
-      )
-    }
-
-    return res
-      .filter(p => p.embedding !== null)
-      .map(
-        p =>
-          ({
-            uri: p.uri,
-            embedding: JSON.parse(p.embedding as string) as number[]
-          } as EmbeddedPostUri)
-      )
+    return await new Promise((resolve, reject) =>
+      this.db
+        .selectFrom('post')
+        .select(['uri', 'embedding'])
+        .where('uri', 'in', postUris)
+        .where('embedding', '!=', null)
+        .execute()
+        .then(res =>
+          resolve(
+            res
+              .filter(p => p.embedding !== null)
+              .map(
+                p =>
+                  ({
+                    uri: p.uri,
+                    embedding: JSON.parse(p.embedding as string) as number[]
+                  } as EmbeddedPostUri)
+              )
+          )
+        )
+        .catch(e => reject(new Error(`_getLikedPostsEmbeddings: ${e}`)))
+    )
   }
 }
 
