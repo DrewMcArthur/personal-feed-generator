@@ -9,7 +9,7 @@ import {
   layers,
   sequential,
   tensor,
-  tensor2d,
+  tensor2d
 } from '@tensorflow/tfjs-node'
 
 /// an ML model that scores posts based on the likelihood that the user will like it.
@@ -25,7 +25,7 @@ export default class Model {
   _setupModel(): Sequential {
     const initializerConfig = {
       minval: -0.05,
-      maxval: 0.05,
+      maxval: 0.05
     }
 
     let model = sequential({
@@ -35,64 +35,30 @@ export default class Model {
           units: 192,
           activation: 'sigmoid',
           kernelInitializer: initializers.randomUniform(initializerConfig),
-          biasInitializer: initializers.randomUniform(initializerConfig),
+          biasInitializer: initializers.randomUniform(initializerConfig)
         }),
         layers.dense({
           units: 12,
           activation: 'sigmoid',
           kernelInitializer: initializers.randomUniform(initializerConfig),
-          biasInitializer: initializers.randomUniform(initializerConfig),
+          biasInitializer: initializers.randomUniform(initializerConfig)
         }),
         layers.dense({
           units: 1,
           activation: 'linear',
           kernelInitializer: initializers.randomUniform(initializerConfig),
-          biasInitializer: initializers.randomUniform(initializerConfig),
-        }),
-      ],
+          biasInitializer: initializers.randomUniform(initializerConfig)
+        })
+      ]
     })
 
     model.compile({
       loss: 'meanSquaredError',
       optimizer: 'adam',
-      metrics: ['mae'],
+      metrics: ['mae']
     })
 
     return model
-  }
-
-  async train() {
-    console.debug('Training model...')
-
-    const likes: DbLike[] = await this.db
-      .selectFrom('like')
-      .selectAll()
-      .where('trainedOn', '=', false)
-      .execute()
-
-    const likedPostUris = likes.map((like) => like.postUri)
-    const likedPostEmbeddings = await this._getLikedPostsEmbeddings(
-      likedPostUris,
-    )
-    const trainingLosses = await Promise.all(
-      likedPostEmbeddings.map((e) => {
-        return this.nn.trainOnBatch(tensor(e), tensor([1.0]))
-      }),
-    )
-
-    await this.db
-      .updateTable('like')
-      .set({ trainedOn: true })
-      .where(
-        'postUri',
-        'in',
-        likedPostEmbeddings.map((e) => e.uri),
-      )
-      .where('trainedOn', '=', false)
-      .execute()
-
-    console.log(`Model trained on ${likedPostEmbeddings.length} liked posts.`)
-    return trainingLosses
   }
 
   async score(embedding: number[]): Promise<number> {
@@ -102,32 +68,66 @@ export default class Model {
     return score
   }
 
+  async train() {
+    console.debug('Training model...')
+
+    const likes: DbLike[] = await this.db
+      .selectFrom('like')
+      .selectAll()
+      .where('trainedOn', '=', 0)
+      .execute()
+
+    const likedPostUris = likes.map(like => like.postUri)
+    const likedPostEmbeddings = await this._getLikedPostsEmbeddings(
+      likedPostUris
+    )
+    const trainingLosses = await Promise.all(
+      likedPostEmbeddings.map(e => {
+        return this.nn.trainOnBatch(tensor(e), tensor([1.0]))
+      })
+    )
+
+    await this.db
+      .updateTable('like')
+      .set({ trainedOn: 1 })
+      .where(
+        'postUri',
+        'in',
+        likedPostEmbeddings.map(e => e.uri)
+      )
+      .where('trainedOn', '=', 0)
+      .execute()
+
+    console.log(`Model trained on ${likedPostEmbeddings.length} liked posts.`)
+    return trainingLosses
+  }
+
   private async _getLikedPostsEmbeddings(
-    postUris: string[],
+    postUris: string[]
   ): Promise<EmbeddedPostUri[]> {
     const res = await this.db
       .selectFrom('post')
       .select(['uri', 'embedding'])
       .where('uri', 'in', postUris)
+      .where('embedding', '!=', null)
       .execute()
 
     if (res.length < 1) {
       throw new Error(
         `Expected at least 1 post but got ${
           res.length
-        } for uris ${postUris.join(', ')}`,
+        } for uris ${postUris.join(', ')}`
       )
     }
 
     return res
-      .map((r) => ({ uri: r.uri, embedding: r.embedding }))
-      .filter((p) => p.embedding !== null)
+      .filter(p => p.embedding !== null)
       .map(
-        (p) =>
+        p =>
           ({
             uri: p.uri,
-            embedding: JSON.parse(p.embedding as string) as number[],
-          } as EmbeddedPostUri),
+            embedding: JSON.parse(p.embedding as string) as number[]
+          } as EmbeddedPostUri)
       )
   }
 }

@@ -21,9 +21,11 @@ export type SubState = {
 }
 
 export type Like = {
+  uri: string
+  cid: string
   author: string
   postUri: string
   postCid: string
   indexedAt: string
-  trainedOn: boolean
+  trainedOn: number
 }

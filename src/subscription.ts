@@ -13,6 +13,7 @@ import {
   OperationsByType,
   getOpsByType
 } from './util/subscription'
+import { uri } from './algos/whats-alf'
 
 export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   model: Model
@@ -20,8 +21,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   cacheTtlMin: number
   cacheClearedAt: Date
 
-  // TODO: update cacheTtlMin
-  constructor(db, endpoint: string, model: Model, cacheTtlMin: number = 1) {
+  constructor(db, endpoint: string, model: Model, cacheTtlMin: number = 15) {
     super(db, endpoint)
     this.model = model
     this.cacheTtlMin = cacheTtlMin
@@ -31,31 +31,29 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   async handleEvent(evt: RepoEvent) {
     if (!isCommit(evt)) return
     const ops: OperationsByType = await getOpsByType(evt)
-    const tasks = [
-      this._handleLikes(ops.likes),
-      this._handleCreatedPosts(ops.posts.creates),
+
+    await this._handleCreatedPosts(ops.posts.creates)
+    await this._handleLikes(ops.likes)
+    await Promise.all([
       this._handleDeletedRecords(ops.posts.deletes, 'post'),
       this._handleDeletedRecords(ops.likes.deletes, 'like'),
       this._cleanup()
-    ]
-    await Promise.all(tasks)
+    ])
   }
 
   async _handleCreatedPosts(creates: CreateOp<PostRecord>[]) {
-    const values = await Promise.all(
-      creates.map(async post => {
-        return {
-          uri: post.uri,
-          cid: post.cid,
-          text: post.record.text,
-          replyParent: post.record?.reply?.parent.uri ?? null,
-          replyRoot: post.record?.reply?.root.uri ?? null,
-          indexedAt: new Date().toISOString()
-          // embedding: JSON.stringify(embedding),
-          // score: score,
-        }
-      })
-    )
+    const values = creates.map(post => {
+      return {
+        uri: post.uri,
+        cid: post.cid,
+        text: post.record.text,
+        replyParent: post.record?.reply?.parent.uri ?? null,
+        replyRoot: post.record?.reply?.root.uri ?? null,
+        indexedAt: new Date().toISOString()
+        // embedding: JSON.stringify(embedding),
+        // score: score,
+      }
+    })
 
     if (values.length > 0)
       await new Promise((resolve, reject) =>
@@ -76,11 +74,13 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
       // currently, saves all likes, but could filter by like author
       // .filter((like) => like.author === this.userDid)
       .map(like => ({
+        uri: like.uri,
+        cid: like.cid,
         postUri: like.record.subject.uri,
         postCid: like.record.subject.cid,
         author: like.author,
         indexedAt: new Date().toISOString(),
-        trainedOn: false
+        trainedOn: 0
       }))
 
     const existingPostUris: string[] = await new Promise((resolve, reject) =>
@@ -92,6 +92,11 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
           'in',
           newLikes.map(l => l.postUri)
         )
+        .where(
+          'cid',
+          'in',
+          newLikes.map(l => l.postCid)
+        )
         .execute()
         .then(rows => resolve(rows.map(row => row.uri) as string[]))
         .catch(e => reject(new Error(`error selecting existing posts`, e)))
@@ -102,7 +107,6 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     )
 
     if (likesToTrainOn.length > 0) {
-      console.debug('found %d likes to train on', likesToTrainOn.length)
       await new Promise((resolve, reject) =>
         this.db
           .insertInto('like')
@@ -112,7 +116,11 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
           .then(resolve)
           .catch(e =>
             reject(
-              new Error(`error inserting ${likesToTrainOn.length} likes: ${e}`)
+              new Error(
+                `error inserting ${
+                  likesToTrainOn.length
+                } likes (${JSON.stringify(likesToTrainOn)}): ${e}`
+              )
             )
           )
       )
@@ -120,7 +128,24 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
   }
 
   async _handleDeletedRecords(deletes: DeleteOp[], table: 'post' | 'like') {
-    const deletedRecordUris = deletes.map(del => del.uri)
+    const existingRecords = await new Promise<string[]>((resolve, reject) =>
+      this.db
+        .selectFrom(table)
+        .select('uri')
+        .where(
+          'uri',
+          'in',
+          deletes.map(del => del.uri)
+        )
+        .execute()
+        .then(rows => resolve(rows.map(row => row.uri) as string[]))
+        .catch(e => reject(new Error(`error selecting existing records`, e)))
+    )
+
+    const deletedRecordUris = deletes
+      .map(del => del.uri)
+      .filter(uri => existingRecords.includes(uri))
+
     if (deletedRecordUris.length > 0) {
       await new Promise((resolve, reject) =>
         this.db
@@ -131,7 +156,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
           .catch(e =>
             reject(
               new Error(
-                `error deleting ${deletedRecordUris.length} records: ${e}`
+                `_handleDeletedRecords Error: deleting ${deletedRecordUris.length} ${table} records (uri=${deletedRecordUris}): ${e}`
               )
             )
           )
@@ -157,7 +182,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
 
   async _deleteOldPosts(): Promise<void> {
     let threshold = new Date()
-    const newHours = threshold.getHours() - this.cacheTtlMin * 60
+    const newHours = threshold.getHours() - this.cacheTtlMin / 60
     console.debug('clearing cache', newHours)
     threshold.setHours(newHours)
 
@@ -178,7 +203,7 @@ export class PersonalizedFirehoseSubscription extends FirehoseSubscriptionBase {
     await new Promise((resolve, reject) =>
       this.db
         .deleteFrom('like')
-        .where('trainedOn', 'is', true)
+        .where('trainedOn', '>', 0)
         .execute()
         .then(resolve)
         .catch(e =>
