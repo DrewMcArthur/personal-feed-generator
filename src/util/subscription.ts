@@ -9,7 +9,7 @@ import { Record as FollowRecord } from '../lexicon/types/app/bsky/graph/follow'
 import {
   Commit,
   OutputSchema as RepoEvent,
-  isCommit,
+  isCommit
 } from '../lexicon/types/com/atproto/sync/subscribeRepos'
 import { Database } from '../db'
 
@@ -25,12 +25,12 @@ export abstract class FirehoseSubscriptionBase {
         try {
           return lexicons.assertValidXrpcMessage<RepoEvent>(
             ids.ComAtprotoSyncSubscribeRepos,
-            value,
+            value
           )
         } catch (err) {
           console.error('repo subscription skipped invalid message', err)
         }
-      },
+      }
     })
   }
 
@@ -74,7 +74,7 @@ export const getOpsByType = async (evt: Commit): Promise<OperationsByType> => {
     posts: { creates: [], deletes: [] },
     reposts: { creates: [], deletes: [] },
     likes: { creates: [], deletes: [] },
-    follows: { creates: [], deletes: [] },
+    follows: { creates: [], deletes: [] }
   }
 
   for (const op of evt.ops) {

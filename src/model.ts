@@ -89,6 +89,8 @@ export default class Model {
       })
     )
 
+    // TODO: save nn to disk
+
     await this.db
       .updateTable('like')
       .set({ trainedOn: 1 })

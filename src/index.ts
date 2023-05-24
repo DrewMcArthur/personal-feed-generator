@@ -18,12 +18,12 @@ const run = async () => {
     hostname,
     serviceDid,
     requesterDid: maybeStr(process.env.MY_DID) ?? 'did:example:alice',
-    cacheTtlMin: maybeInt(process.env.CACHE_TTL_MIN) ?? 30,
+    cacheTtlMin: maybeInt(process.env.CACHE_TTL_MIN) ?? 30
   }
   const server = FeedGenerator.create(config)
   await server.start()
   console.log(
-    `🤖 running feed generator at http://localhost:${server.cfg.port}`,
+    `🤖 running feed generator at http://localhost:${server.cfg.port}`
   )
 }
 

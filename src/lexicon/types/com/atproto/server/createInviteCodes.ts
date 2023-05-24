@@ -63,6 +63,6 @@ export function isAccountCodes(v: unknown): v is AccountCodes {
 export function validateAccountCodes(v: unknown): ValidationResult {
   return lexicons.validate(
     'com.atproto.server.createInviteCodes#accountCodes',
-    v,
+    v
   )
 }

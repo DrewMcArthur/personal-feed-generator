@@ -77,6 +77,6 @@ export function isNotification(v: unknown): v is Notification {
 export function validateNotification(v: unknown): ValidationResult {
   return lexicons.validate(
     'app.bsky.notification.listNotifications#notification',
-    v,
+    v
   )
 }

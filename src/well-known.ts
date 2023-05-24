@@ -15,9 +15,9 @@ const makeRouter = (ctx: AppContext) => {
         {
           id: '#bsky_fg',
           type: 'BskyFeedGenerator',
-          serviceEndpoint: `https://${ctx.cfg.hostname}`,
-        },
-      ],
+          serviceEndpoint: `https://${ctx.cfg.hostname}`
+        }
+      ]
     })
   })
 

@@ -25,7 +25,8 @@ const run = async () => {
 
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
-  const description = 'A personalized algorithm that learns from your (my) likes'
+  const description =
+    'A personalized algorithm that learns from your (my) likes'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
@@ -49,7 +50,7 @@ const run = async () => {
     await agent.api.app.bsky.feed.describeFeedGenerator()
   } catch (err) {
     throw new Error(
-      'The bluesky server is not ready to accept published custom feeds yet',
+      'The bluesky server is not ready to accept published custom feeds yet'
     )
   }
 
@@ -67,7 +68,7 @@ const run = async () => {
     }
     const img = await fs.readFile(avatar)
     const blobRes = await agent.api.com.atproto.repo.uploadBlob(img, {
-      encoding,
+      encoding
     })
     avatarRef = blobRes.data.blob
   }
@@ -81,8 +82,8 @@ const run = async () => {
       displayName: displayName,
       description: description,
       avatar: avatarRef,
-      createdAt: new Date().toISOString(),
-    },
+      createdAt: new Date().toISOString()
+    }
   })
 
   console.log('All done 🎉')

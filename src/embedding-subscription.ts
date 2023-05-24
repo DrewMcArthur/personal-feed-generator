@@ -1,48 +1,35 @@
 import { Subscription } from '@atproto/xrpc-server'
 import { Database } from './db'
-import { ids, lexicons } from './lexicon/lexicons'
 import Model from './model'
+import { WebSocket } from 'ws'
 
 /// subscription to the embedding-firehose
 export default class EmbeddingFirehoseSubscription {
   public sub: Subscription<EmbeddingFirehoseEvent>
+  private socket: WebSocket
 
   constructor(
     public db: Database,
-    public service: string,
-    public model: Model,
+    public subscriptionUrl: string,
+    public model: Model
   ) {
-    this.sub = new Subscription({
-      service: service,
-      method: ids.ComAtprotoSyncSubscribeRepos,
-      validate: (value: unknown) => {
-        try {
-          return lexicons.assertValidXrpcMessage<EmbeddingFirehoseEvent>(
-            ids.ComAtprotoSyncSubscribeRepos,
-            value,
-          )
-        } catch (err) {
-          console.error('repo subscription skipped invalid message', err)
-        }
-      },
-    })
+    this._initSocket(subscriptionUrl)
   }
 
-  async run() {
-    for await (const evt of this.sub) {
-      try {
-        await this.handleEvent(evt)
-      } catch (err) {
-        console.error('repo subscription could not handle message', err)
-      }
-    }
+  private _initSocket(subscriptionUrl: string) {
+    this.socket = new WebSocket(subscriptionUrl)
+    this.socket.onopen = e => console.debug('socket opened')
+    this.socket.onmessage = event =>
+      this.handleEvent(JSON.parse(event.data.toString()))
+    this.socket.onclose = e => console.debug('socket closed')
   }
 
   async handleEvent(evt: EmbeddingFirehoseEvent): Promise<void> {
-    const { uri, embedding } = evt
-    console.log(`received embedding-firehose event for ${uri}`)
-
+    const { uri, embedding, numTokens } = evt
+    if (embedding === null || embedding.length !== 1536) return
+    console.debug(`received valid embedding-firehose event for ${uri}`)
     const score = await this.model.score(embedding)
+    console.debug(`score: ${score}`)
     await this.db
       .updateTable('post')
       .set({ embedding: JSON.stringify(embedding), score })
@@ -53,5 +40,6 @@ export default class EmbeddingFirehoseSubscription {
 
 type EmbeddingFirehoseEvent = {
   uri: string
-  embedding: number[]
+  embedding: number[] | null
+  numTokens: number
 }

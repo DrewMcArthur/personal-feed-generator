@@ -60,6 +60,6 @@ export function isAppPassword(v: unknown): v is AppPassword {
 export function validateAppPassword(v: unknown): ValidationResult {
   return lexicons.validate(
     'com.atproto.server.createAppPassword#appPassword',
-    v,
+    v
   )
 }

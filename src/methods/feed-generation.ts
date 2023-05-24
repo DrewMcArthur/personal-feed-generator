@@ -10,22 +10,22 @@ export default function (server: Server, ctx: AppContext) {
     if (!algo) {
       throw new InvalidRequestError(
         'Unsupported algorithm',
-        'UnsupportedAlgorithm',
+        'UnsupportedAlgorithm'
       )
     }
 
-    // todo this overwrites the did from the .env.  
+    // todo this overwrites the did from the .env.
     // need to differentiate between requester and which DIDs the server is setup for
     ctx.cfg.requesterDid = await validateAuth(
       req,
       ctx.cfg.serviceDid,
-      ctx.didResolver,
+      ctx.didResolver
     )
 
     const body = await algo(ctx, params)
     return {
       encoding: 'application/json',
-      body: body,
+      body: body
     }
   })
 }

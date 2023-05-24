@@ -18,63 +18,63 @@ export const schemaDict = {
           'reason',
           'createdBy',
           'createdAt',
-          'resolvedReportIds',
+          'resolvedReportIds'
         ],
         properties: {
           id: {
-            type: 'integer',
+            type: 'integer'
           },
           action: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionType',
+            ref: 'lex:com.atproto.admin.defs#actionType'
           },
           subject: {
             type: 'union',
             refs: [
               'lex:com.atproto.admin.defs#repoRef',
-              'lex:com.atproto.repo.strongRef',
-            ],
+              'lex:com.atproto.repo.strongRef'
+            ]
           },
           subjectBlobCids: {
             type: 'array',
             items: {
-              type: 'string',
-            },
+              type: 'string'
+            }
           },
           createLabelVals: {
             type: 'array',
             items: {
-              type: 'string',
-            },
+              type: 'string'
+            }
           },
           negateLabelVals: {
             type: 'array',
             items: {
-              type: 'string',
-            },
+              type: 'string'
+            }
           },
           reason: {
-            type: 'string',
+            type: 'string'
           },
           createdBy: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           createdAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           reversal: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionReversal',
+            ref: 'lex:com.atproto.admin.defs#actionReversal'
           },
           resolvedReportIds: {
             type: 'array',
             items: {
-              type: 'integer',
-            },
-          },
-        },
+              type: 'integer'
+            }
+          }
+        }
       },
       actionViewDetail: {
         type: 'object',
@@ -86,95 +86,95 @@ export const schemaDict = {
           'reason',
           'createdBy',
           'createdAt',
-          'resolvedReports',
+          'resolvedReports'
         ],
         properties: {
           id: {
-            type: 'integer',
+            type: 'integer'
           },
           action: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionType',
+            ref: 'lex:com.atproto.admin.defs#actionType'
           },
           subject: {
             type: 'union',
             refs: [
               'lex:com.atproto.admin.defs#repoView',
-              'lex:com.atproto.admin.defs#recordView',
-            ],
+              'lex:com.atproto.admin.defs#recordView'
+            ]
           },
           subjectBlobs: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.admin.defs#blobView',
-            },
+              ref: 'lex:com.atproto.admin.defs#blobView'
+            }
           },
           createLabelVals: {
             type: 'array',
             items: {
-              type: 'string',
-            },
+              type: 'string'
+            }
           },
           negateLabelVals: {
             type: 'array',
             items: {
-              type: 'string',
-            },
+              type: 'string'
+            }
           },
           reason: {
-            type: 'string',
+            type: 'string'
           },
           createdBy: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           createdAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           reversal: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionReversal',
+            ref: 'lex:com.atproto.admin.defs#actionReversal'
           },
           resolvedReports: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.admin.defs#reportView',
-            },
-          },
-        },
+              ref: 'lex:com.atproto.admin.defs#reportView'
+            }
+          }
+        }
       },
       actionViewCurrent: {
         type: 'object',
         required: ['id', 'action'],
         properties: {
           id: {
-            type: 'integer',
+            type: 'integer'
           },
           action: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionType',
-          },
-        },
+            ref: 'lex:com.atproto.admin.defs#actionType'
+          }
+        }
       },
       actionReversal: {
         type: 'object',
         required: ['reason', 'createdBy', 'createdAt'],
         properties: {
           reason: {
-            type: 'string',
+            type: 'string'
           },
           createdBy: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           createdAt: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
+            format: 'datetime'
+          }
+        }
       },
       actionType: {
         type: 'string',
@@ -182,28 +182,28 @@ export const schemaDict = {
           'lex:com.atproto.admin.defs#takedown',
           'lex:com.atproto.admin.defs#flag',
           'lex:com.atproto.admin.defs#acknowledge',
-          'lex:com.atproto.admin.defs#escalate',
-        ],
+          'lex:com.atproto.admin.defs#escalate'
+        ]
       },
       takedown: {
         type: 'token',
         description:
-          'Moderation action type: Takedown. Indicates that content should not be served by the PDS.',
+          'Moderation action type: Takedown. Indicates that content should not be served by the PDS.'
       },
       flag: {
         type: 'token',
         description:
-          'Moderation action type: Flag. Indicates that the content was reviewed and considered to violate PDS rules, but may still be served.',
+          'Moderation action type: Flag. Indicates that the content was reviewed and considered to violate PDS rules, but may still be served.'
       },
       acknowledge: {
         type: 'token',
         description:
-          'Moderation action type: Acknowledge. Indicates that the content was reviewed and not considered to violate PDS rules.',
+          'Moderation action type: Acknowledge. Indicates that the content was reviewed and not considered to violate PDS rules.'
       },
       escalate: {
         type: 'token',
         description:
-          'Moderation action type: Escalate. Indicates that the content has been flagged for additional review.',
+          'Moderation action type: Escalate. Indicates that the content has been flagged for additional review.'
       },
       reportView: {
         type: 'object',
@@ -213,41 +213,41 @@ export const schemaDict = {
           'subject',
           'reportedBy',
           'createdAt',
-          'resolvedByActionIds',
+          'resolvedByActionIds'
         ],
         properties: {
           id: {
-            type: 'integer',
+            type: 'integer'
           },
           reasonType: {
             type: 'ref',
-            ref: 'lex:com.atproto.moderation.defs#reasonType',
+            ref: 'lex:com.atproto.moderation.defs#reasonType'
           },
           reason: {
-            type: 'string',
+            type: 'string'
           },
           subject: {
             type: 'union',
             refs: [
               'lex:com.atproto.admin.defs#repoRef',
-              'lex:com.atproto.repo.strongRef',
-            ],
+              'lex:com.atproto.repo.strongRef'
+            ]
           },
           reportedBy: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           createdAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           resolvedByActionIds: {
             type: 'array',
             items: {
-              type: 'integer',
-            },
-          },
-        },
+              type: 'integer'
+            }
+          }
+        }
       },
       reportViewDetail: {
         type: 'object',
@@ -257,42 +257,42 @@ export const schemaDict = {
           'subject',
           'reportedBy',
           'createdAt',
-          'resolvedByActions',
+          'resolvedByActions'
         ],
         properties: {
           id: {
-            type: 'integer',
+            type: 'integer'
           },
           reasonType: {
             type: 'ref',
-            ref: 'lex:com.atproto.moderation.defs#reasonType',
+            ref: 'lex:com.atproto.moderation.defs#reasonType'
           },
           reason: {
-            type: 'string',
+            type: 'string'
           },
           subject: {
             type: 'union',
             refs: [
               'lex:com.atproto.admin.defs#repoView',
-              'lex:com.atproto.admin.defs#recordView',
-            ],
+              'lex:com.atproto.admin.defs#recordView'
+            ]
           },
           reportedBy: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           createdAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           resolvedByActions: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.admin.defs#actionView',
-            },
-          },
-        },
+              ref: 'lex:com.atproto.admin.defs#actionView'
+            }
+          }
+        }
       },
       repoView: {
         type: 'object',
@@ -301,42 +301,42 @@ export const schemaDict = {
           'handle',
           'relatedRecords',
           'indexedAt',
-          'moderation',
+          'moderation'
         ],
         properties: {
           did: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           handle: {
             type: 'string',
-            format: 'handle',
+            format: 'handle'
           },
           email: {
-            type: 'string',
+            type: 'string'
           },
           relatedRecords: {
             type: 'array',
             items: {
-              type: 'unknown',
-            },
+              type: 'unknown'
+            }
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           moderation: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#moderation',
+            ref: 'lex:com.atproto.admin.defs#moderation'
           },
           invitedBy: {
             type: 'ref',
-            ref: 'lex:com.atproto.server.defs#inviteCode',
+            ref: 'lex:com.atproto.server.defs#inviteCode'
           },
           invitesDisabled: {
-            type: 'boolean',
-          },
-        },
+            type: 'boolean'
+          }
+        }
       },
       repoViewDetail: {
         type: 'object',
@@ -345,56 +345,56 @@ export const schemaDict = {
           'handle',
           'relatedRecords',
           'indexedAt',
-          'moderation',
+          'moderation'
         ],
         properties: {
           did: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           handle: {
             type: 'string',
-            format: 'handle',
+            format: 'handle'
           },
           email: {
-            type: 'string',
+            type: 'string'
           },
           relatedRecords: {
             type: 'array',
             items: {
-              type: 'unknown',
-            },
+              type: 'unknown'
+            }
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           moderation: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#moderationDetail',
+            ref: 'lex:com.atproto.admin.defs#moderationDetail'
           },
           labels: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.label.defs#label',
-            },
+              ref: 'lex:com.atproto.label.defs#label'
+            }
           },
           invitedBy: {
             type: 'ref',
-            ref: 'lex:com.atproto.server.defs#inviteCode',
+            ref: 'lex:com.atproto.server.defs#inviteCode'
           },
           invites: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.server.defs#inviteCode',
-            },
+              ref: 'lex:com.atproto.server.defs#inviteCode'
+            }
           },
           invitesDisabled: {
-            type: 'boolean',
-          },
-        },
+            type: 'boolean'
+          }
+        }
       },
       repoRef: {
         type: 'object',
@@ -402,9 +402,9 @@ export const schemaDict = {
         properties: {
           did: {
             type: 'string',
-            format: 'did',
-          },
-        },
+            format: 'did'
+          }
+        }
       },
       recordView: {
         type: 'object',
@@ -415,40 +415,40 @@ export const schemaDict = {
           'blobCids',
           'indexedAt',
           'moderation',
-          'repo',
+          'repo'
         ],
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           cid: {
             type: 'string',
-            format: 'cid',
+            format: 'cid'
           },
           value: {
-            type: 'unknown',
+            type: 'unknown'
           },
           blobCids: {
             type: 'array',
             items: {
               type: 'string',
-              format: 'cid',
-            },
+              format: 'cid'
+            }
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           moderation: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#moderation',
+            ref: 'lex:com.atproto.admin.defs#moderation'
           },
           repo: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#repoView',
-          },
-        },
+            ref: 'lex:com.atproto.admin.defs#repoView'
+          }
+        }
       },
       recordViewDetail: {
         type: 'object',
@@ -459,47 +459,47 @@ export const schemaDict = {
           'blobs',
           'indexedAt',
           'moderation',
-          'repo',
+          'repo'
         ],
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           cid: {
             type: 'string',
-            format: 'cid',
+            format: 'cid'
           },
           value: {
-            type: 'unknown',
+            type: 'unknown'
           },
           blobs: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.admin.defs#blobView',
-            },
+              ref: 'lex:com.atproto.admin.defs#blobView'
+            }
           },
           labels: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.label.defs#label',
-            },
+              ref: 'lex:com.atproto.label.defs#label'
+            }
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           moderation: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#moderationDetail',
+            ref: 'lex:com.atproto.admin.defs#moderationDetail'
           },
           repo: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#repoView',
-          },
-        },
+            ref: 'lex:com.atproto.admin.defs#repoView'
+          }
+        }
       },
       moderation: {
         type: 'object',
@@ -507,9 +507,9 @@ export const schemaDict = {
         properties: {
           currentAction: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionViewCurrent',
-          },
-        },
+            ref: 'lex:com.atproto.admin.defs#actionViewCurrent'
+          }
+        }
       },
       moderationDetail: {
         type: 'object',
@@ -517,23 +517,23 @@ export const schemaDict = {
         properties: {
           currentAction: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionViewCurrent',
+            ref: 'lex:com.atproto.admin.defs#actionViewCurrent'
           },
           actions: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.admin.defs#actionView',
-            },
+              ref: 'lex:com.atproto.admin.defs#actionView'
+            }
           },
           reports: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.admin.defs#reportView',
-            },
-          },
-        },
+              ref: 'lex:com.atproto.admin.defs#reportView'
+            }
+          }
+        }
       },
       blobView: {
         type: 'object',
@@ -541,59 +541,59 @@ export const schemaDict = {
         properties: {
           cid: {
             type: 'string',
-            format: 'cid',
+            format: 'cid'
           },
           mimeType: {
-            type: 'string',
+            type: 'string'
           },
           size: {
-            type: 'integer',
+            type: 'integer'
           },
           createdAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           details: {
             type: 'union',
             refs: [
               'lex:com.atproto.admin.defs#imageDetails',
-              'lex:com.atproto.admin.defs#videoDetails',
-            ],
+              'lex:com.atproto.admin.defs#videoDetails'
+            ]
           },
           moderation: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#moderation',
-          },
-        },
+            ref: 'lex:com.atproto.admin.defs#moderation'
+          }
+        }
       },
       imageDetails: {
         type: 'object',
         required: ['width', 'height'],
         properties: {
           width: {
-            type: 'integer',
+            type: 'integer'
           },
           height: {
-            type: 'integer',
-          },
-        },
+            type: 'integer'
+          }
+        }
       },
       videoDetails: {
         type: 'object',
         required: ['width', 'height', 'length'],
         properties: {
           width: {
-            type: 'integer',
+            type: 'integer'
           },
           height: {
-            type: 'integer',
+            type: 'integer'
           },
           length: {
-            type: 'integer',
-          },
-        },
-      },
-    },
+            type: 'integer'
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminDisableAccountInvites: {
     lexicon: 1,
@@ -611,13 +611,13 @@ export const schemaDict = {
             properties: {
               account: {
                 type: 'string',
-                format: 'did',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'did'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminDisableInviteCodes: {
     lexicon: 1,
@@ -635,20 +635,20 @@ export const schemaDict = {
               codes: {
                 type: 'array',
                 items: {
-                  type: 'string',
-                },
+                  type: 'string'
+                }
               },
               accounts: {
                 type: 'array',
                 items: {
-                  type: 'string',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminEnableAccountInvites: {
     lexicon: 1,
@@ -665,13 +665,13 @@ export const schemaDict = {
             properties: {
               account: {
                 type: 'string',
-                format: 'did',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'did'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminGetInviteCodes: {
     lexicon: 1,
@@ -686,18 +686,18 @@ export const schemaDict = {
             sort: {
               type: 'string',
               knownValues: ['recent', 'usage'],
-              default: 'recent',
+              default: 'recent'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 500,
-              default: 100,
+              default: 100
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -706,20 +706,20 @@ export const schemaDict = {
             required: ['codes'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               codes: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:com.atproto.server.defs#inviteCode',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:com.atproto.server.defs#inviteCode'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminGetModerationAction: {
     lexicon: 1,
@@ -733,19 +733,19 @@ export const schemaDict = {
           required: ['id'],
           properties: {
             id: {
-              type: 'integer',
-            },
-          },
+              type: 'integer'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
           schema: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionViewDetail',
-          },
-        },
-      },
-    },
+            ref: 'lex:com.atproto.admin.defs#actionViewDetail'
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminGetModerationActions: {
     lexicon: 1,
@@ -758,18 +758,18 @@ export const schemaDict = {
           type: 'params',
           properties: {
             subject: {
-              type: 'string',
+              type: 'string'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -778,20 +778,20 @@ export const schemaDict = {
             required: ['actions'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               actions: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:com.atproto.admin.defs#actionView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:com.atproto.admin.defs#actionView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminGetModerationReport: {
     lexicon: 1,
@@ -805,19 +805,19 @@ export const schemaDict = {
           required: ['id'],
           properties: {
             id: {
-              type: 'integer',
-            },
-          },
+              type: 'integer'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
           schema: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#reportViewDetail',
-          },
-        },
-      },
-    },
+            ref: 'lex:com.atproto.admin.defs#reportViewDetail'
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminGetModerationReports: {
     lexicon: 1,
@@ -830,10 +830,10 @@ export const schemaDict = {
           type: 'params',
           properties: {
             subject: {
-              type: 'string',
+              type: 'string'
             },
             resolved: {
-              type: 'boolean',
+              type: 'boolean'
             },
             actionType: {
               type: 'string',
@@ -841,19 +841,19 @@ export const schemaDict = {
                 'com.atproto.admin.defs#takedown',
                 'com.atproto.admin.defs#flag',
                 'com.atproto.admin.defs#acknowledge',
-                'com.atproto.admin.defs#escalate',
-              ],
+                'com.atproto.admin.defs#escalate'
+              ]
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -862,20 +862,20 @@ export const schemaDict = {
             required: ['reports'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               reports: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:com.atproto.admin.defs#reportView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:com.atproto.admin.defs#reportView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminGetRecord: {
     lexicon: 1,
@@ -890,23 +890,23 @@ export const schemaDict = {
           properties: {
             uri: {
               type: 'string',
-              format: 'at-uri',
+              format: 'at-uri'
             },
             cid: {
               type: 'string',
-              format: 'cid',
-            },
-          },
+              format: 'cid'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
           schema: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#recordViewDetail',
-          },
-        },
-      },
-    },
+            ref: 'lex:com.atproto.admin.defs#recordViewDetail'
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminGetRepo: {
     lexicon: 1,
@@ -921,19 +921,19 @@ export const schemaDict = {
           properties: {
             did: {
               type: 'string',
-              format: 'did',
-            },
-          },
+              format: 'did'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
           schema: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#repoViewDetail',
-          },
-        },
-      },
-    },
+            ref: 'lex:com.atproto.admin.defs#repoViewDetail'
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminResolveModerationReports: {
     lexicon: 1,
@@ -949,30 +949,30 @@ export const schemaDict = {
             required: ['actionId', 'reportIds', 'createdBy'],
             properties: {
               actionId: {
-                type: 'integer',
+                type: 'integer'
               },
               reportIds: {
                 type: 'array',
                 items: {
-                  type: 'integer',
-                },
+                  type: 'integer'
+                }
               },
               createdBy: {
                 type: 'string',
-                format: 'did',
-              },
-            },
-          },
+                format: 'did'
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
           schema: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionView',
-          },
-        },
-      },
-    },
+            ref: 'lex:com.atproto.admin.defs#actionView'
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminReverseModerationAction: {
     lexicon: 1,
@@ -988,27 +988,27 @@ export const schemaDict = {
             required: ['id', 'reason', 'createdBy'],
             properties: {
               id: {
-                type: 'integer',
+                type: 'integer'
               },
               reason: {
-                type: 'string',
+                type: 'string'
               },
               createdBy: {
                 type: 'string',
-                format: 'did',
-              },
-            },
-          },
+                format: 'did'
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
           schema: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionView',
-          },
-        },
-      },
-    },
+            ref: 'lex:com.atproto.admin.defs#actionView'
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminSearchRepos: {
     lexicon: 1,
@@ -1021,21 +1021,21 @@ export const schemaDict = {
           type: 'params',
           properties: {
             term: {
-              type: 'string',
+              type: 'string'
             },
             invitedBy: {
-              type: 'string',
+              type: 'string'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -1044,20 +1044,20 @@ export const schemaDict = {
             required: ['repos'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               repos: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:com.atproto.admin.defs#repoView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:com.atproto.admin.defs#repoView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminTakeModerationAction: {
     lexicon: 1,
@@ -1077,59 +1077,59 @@ export const schemaDict = {
                 knownValues: [
                   'com.atproto.admin.defs#takedown',
                   'com.atproto.admin.defs#flag',
-                  'com.atproto.admin.defs#acknowledge',
-                ],
+                  'com.atproto.admin.defs#acknowledge'
+                ]
               },
               subject: {
                 type: 'union',
                 refs: [
                   'lex:com.atproto.admin.defs#repoRef',
-                  'lex:com.atproto.repo.strongRef',
-                ],
+                  'lex:com.atproto.repo.strongRef'
+                ]
               },
               subjectBlobCids: {
                 type: 'array',
                 items: {
                   type: 'string',
-                  format: 'cid',
-                },
+                  format: 'cid'
+                }
               },
               createLabelVals: {
                 type: 'array',
                 items: {
-                  type: 'string',
-                },
+                  type: 'string'
+                }
               },
               negateLabelVals: {
                 type: 'array',
                 items: {
-                  type: 'string',
-                },
+                  type: 'string'
+                }
               },
               reason: {
-                type: 'string',
+                type: 'string'
               },
               createdBy: {
                 type: 'string',
-                format: 'did',
-              },
-            },
-          },
+                format: 'did'
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
           schema: {
             type: 'ref',
-            ref: 'lex:com.atproto.admin.defs#actionView',
-          },
+            ref: 'lex:com.atproto.admin.defs#actionView'
+          }
         },
         errors: [
           {
-            name: 'SubjectHasAction',
-          },
-        ],
-      },
-    },
+            name: 'SubjectHasAction'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoAdminUpdateAccountEmail: {
     lexicon: 1,
@@ -1147,16 +1147,16 @@ export const schemaDict = {
               account: {
                 type: 'string',
                 format: 'at-identifier',
-                description: 'The handle or DID of the repo.',
+                description: 'The handle or DID of the repo.'
               },
               email: {
-                type: 'string',
-              },
-            },
-          },
-        },
-      },
-    },
+                type: 'string'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoAdminUpdateAccountHandle: {
     lexicon: 1,
@@ -1173,17 +1173,17 @@ export const schemaDict = {
             properties: {
               did: {
                 type: 'string',
-                format: 'did',
+                format: 'did'
               },
               handle: {
                 type: 'string',
-                format: 'handle',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'handle'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoIdentityResolveHandle: {
     lexicon: 1,
@@ -1199,9 +1199,9 @@ export const schemaDict = {
               type: 'string',
               format: 'handle',
               description:
-                "The handle to resolve. If not supplied, will resolve the host's own handle.",
-            },
-          },
+                "The handle to resolve. If not supplied, will resolve the host's own handle."
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -1211,13 +1211,13 @@ export const schemaDict = {
             properties: {
               did: {
                 type: 'string',
-                format: 'did',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'did'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoIdentityUpdateHandle: {
     lexicon: 1,
@@ -1234,13 +1234,13 @@ export const schemaDict = {
             properties: {
               handle: {
                 type: 'string',
-                format: 'handle',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'handle'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoLabelDefs: {
     lexicon: 1,
@@ -1254,39 +1254,39 @@ export const schemaDict = {
           src: {
             type: 'string',
             format: 'did',
-            description: 'DID of the actor who created this label',
+            description: 'DID of the actor who created this label'
           },
           uri: {
             type: 'string',
             format: 'uri',
             description:
-              'AT URI of the record, repository (account), or other resource which this label applies to',
+              'AT URI of the record, repository (account), or other resource which this label applies to'
           },
           cid: {
             type: 'string',
             format: 'cid',
             description:
-              "optionally, CID specifying the specific version of 'uri' resource this label applies to",
+              "optionally, CID specifying the specific version of 'uri' resource this label applies to"
           },
           val: {
             type: 'string',
             maxLength: 128,
             description:
-              'the short string name of the value or type of this label',
+              'the short string name of the value or type of this label'
           },
           neg: {
             type: 'boolean',
             description:
-              'if true, this is a negation label, overwriting a previous label',
+              'if true, this is a negation label, overwriting a previous label'
           },
           cts: {
             type: 'string',
             format: 'datetime',
-            description: 'timestamp when this label was created',
-          },
-        },
-      },
-    },
+            description: 'timestamp when this label was created'
+          }
+        }
+      }
+    }
   },
   ComAtprotoLabelQueryLabels: {
     lexicon: 1,
@@ -1302,29 +1302,29 @@ export const schemaDict = {
             uriPatterns: {
               type: 'array',
               items: {
-                type: 'string',
+                type: 'string'
               },
               description:
-                "List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI",
+                "List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI"
             },
             sources: {
               type: 'array',
               items: {
                 type: 'string',
-                format: 'did',
+                format: 'did'
               },
-              description: 'Optional list of label sources (DIDs) to filter on',
+              description: 'Optional list of label sources (DIDs) to filter on'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 250,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -1333,20 +1333,20 @@ export const schemaDict = {
             required: ['labels'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               labels: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:com.atproto.label.defs#label',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:com.atproto.label.defs#label'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoLabelSubscribeLabels: {
     lexicon: 1,
@@ -1360,40 +1360,40 @@ export const schemaDict = {
           properties: {
             cursor: {
               type: 'integer',
-              description: 'The last known event to backfill from.',
-            },
-          },
+              description: 'The last known event to backfill from.'
+            }
+          }
         },
         message: {
           schema: {
             type: 'union',
             refs: [
               'lex:com.atproto.label.subscribeLabels#labels',
-              'lex:com.atproto.label.subscribeLabels#info',
-            ],
-          },
+              'lex:com.atproto.label.subscribeLabels#info'
+            ]
+          }
         },
         errors: [
           {
-            name: 'FutureCursor',
-          },
-        ],
+            name: 'FutureCursor'
+          }
+        ]
       },
       labels: {
         type: 'object',
         required: ['seq', 'labels'],
         properties: {
           seq: {
-            type: 'integer',
+            type: 'integer'
           },
           labels: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.label.defs#label',
-            },
-          },
-        },
+              ref: 'lex:com.atproto.label.defs#label'
+            }
+          }
+        }
       },
       info: {
         type: 'object',
@@ -1401,14 +1401,14 @@ export const schemaDict = {
         properties: {
           name: {
             type: 'string',
-            knownValues: ['OutdatedCursor'],
+            knownValues: ['OutdatedCursor']
           },
           message: {
-            type: 'string',
-          },
-        },
-      },
-    },
+            type: 'string'
+          }
+        }
+      }
+    }
   },
   ComAtprotoModerationCreateReport: {
     lexicon: 1,
@@ -1425,20 +1425,20 @@ export const schemaDict = {
             properties: {
               reasonType: {
                 type: 'ref',
-                ref: 'lex:com.atproto.moderation.defs#reasonType',
+                ref: 'lex:com.atproto.moderation.defs#reasonType'
               },
               reason: {
-                type: 'string',
+                type: 'string'
               },
               subject: {
                 type: 'union',
                 refs: [
                   'lex:com.atproto.admin.defs#repoRef',
-                  'lex:com.atproto.repo.strongRef',
-                ],
-              },
-            },
-          },
+                  'lex:com.atproto.repo.strongRef'
+                ]
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -1449,39 +1449,39 @@ export const schemaDict = {
               'reasonType',
               'subject',
               'reportedBy',
-              'createdAt',
+              'createdAt'
             ],
             properties: {
               id: {
-                type: 'integer',
+                type: 'integer'
               },
               reasonType: {
                 type: 'ref',
-                ref: 'lex:com.atproto.moderation.defs#reasonType',
+                ref: 'lex:com.atproto.moderation.defs#reasonType'
               },
               reason: {
-                type: 'string',
+                type: 'string'
               },
               subject: {
                 type: 'union',
                 refs: [
                   'lex:com.atproto.admin.defs#repoRef',
-                  'lex:com.atproto.repo.strongRef',
-                ],
+                  'lex:com.atproto.repo.strongRef'
+                ]
               },
               reportedBy: {
                 type: 'string',
-                format: 'did',
+                format: 'did'
               },
               createdAt: {
                 type: 'string',
-                format: 'datetime',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'datetime'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoModerationDefs: {
     lexicon: 1,
@@ -1495,35 +1495,35 @@ export const schemaDict = {
           'com.atproto.moderation.defs#reasonMisleading',
           'com.atproto.moderation.defs#reasonSexual',
           'com.atproto.moderation.defs#reasonRude',
-          'com.atproto.moderation.defs#reasonOther',
-        ],
+          'com.atproto.moderation.defs#reasonOther'
+        ]
       },
       reasonSpam: {
         type: 'token',
-        description: 'Spam: frequent unwanted promotion, replies, mentions',
+        description: 'Spam: frequent unwanted promotion, replies, mentions'
       },
       reasonViolation: {
         type: 'token',
-        description: 'Direct violation of server rules, laws, terms of service',
+        description: 'Direct violation of server rules, laws, terms of service'
       },
       reasonMisleading: {
         type: 'token',
-        description: 'Misleading identity, affiliation, or content',
+        description: 'Misleading identity, affiliation, or content'
       },
       reasonSexual: {
         type: 'token',
-        description: 'Unwanted or mis-labeled sexual content',
+        description: 'Unwanted or mis-labeled sexual content'
       },
       reasonRude: {
         type: 'token',
         description:
-          'Rude, harassing, explicit, or otherwise unwelcoming behavior',
+          'Rude, harassing, explicit, or otherwise unwelcoming behavior'
       },
       reasonOther: {
         type: 'token',
-        description: 'Other: reports not falling under another report category',
-      },
-    },
+        description: 'Other: reports not falling under another report category'
+      }
+    }
   },
   ComAtprotoRepoApplyWrites: {
     lexicon: 1,
@@ -1542,12 +1542,12 @@ export const schemaDict = {
               repo: {
                 type: 'string',
                 format: 'at-identifier',
-                description: 'The handle or DID of the repo.',
+                description: 'The handle or DID of the repo.'
               },
               validate: {
                 type: 'boolean',
                 default: true,
-                description: 'Validate the records?',
+                description: 'Validate the records?'
               },
               writes: {
                 type: 'array',
@@ -1556,23 +1556,23 @@ export const schemaDict = {
                   refs: [
                     'lex:com.atproto.repo.applyWrites#create',
                     'lex:com.atproto.repo.applyWrites#update',
-                    'lex:com.atproto.repo.applyWrites#delete',
+                    'lex:com.atproto.repo.applyWrites#delete'
                   ],
-                  closed: true,
-                },
+                  closed: true
+                }
               },
               swapCommit: {
                 type: 'string',
-                format: 'cid',
-              },
-            },
-          },
+                format: 'cid'
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'InvalidSwap',
-          },
-        ],
+            name: 'InvalidSwap'
+          }
+        ]
       },
       create: {
         type: 'object',
@@ -1581,15 +1581,15 @@ export const schemaDict = {
         properties: {
           collection: {
             type: 'string',
-            format: 'nsid',
+            format: 'nsid'
           },
           rkey: {
-            type: 'string',
+            type: 'string'
           },
           value: {
-            type: 'unknown',
-          },
-        },
+            type: 'unknown'
+          }
+        }
       },
       update: {
         type: 'object',
@@ -1598,15 +1598,15 @@ export const schemaDict = {
         properties: {
           collection: {
             type: 'string',
-            format: 'nsid',
+            format: 'nsid'
           },
           rkey: {
-            type: 'string',
+            type: 'string'
           },
           value: {
-            type: 'unknown',
-          },
-        },
+            type: 'unknown'
+          }
+        }
       },
       delete: {
         type: 'object',
@@ -1615,14 +1615,14 @@ export const schemaDict = {
         properties: {
           collection: {
             type: 'string',
-            format: 'nsid',
+            format: 'nsid'
           },
           rkey: {
-            type: 'string',
-          },
-        },
-      },
-    },
+            type: 'string'
+          }
+        }
+      }
+    }
   },
   ComAtprotoRepoCreateRecord: {
     lexicon: 1,
@@ -1640,34 +1640,33 @@ export const schemaDict = {
               repo: {
                 type: 'string',
                 format: 'at-identifier',
-                description: 'The handle or DID of the repo.',
+                description: 'The handle or DID of the repo.'
               },
               collection: {
                 type: 'string',
                 format: 'nsid',
-                description: 'The NSID of the record collection.',
+                description: 'The NSID of the record collection.'
               },
               rkey: {
                 type: 'string',
-                description: 'The key of the record.',
+                description: 'The key of the record.'
               },
               validate: {
                 type: 'boolean',
                 default: true,
-                description: 'Validate the record?',
+                description: 'Validate the record?'
               },
               record: {
                 type: 'unknown',
-                description: 'The record to create.',
+                description: 'The record to create.'
               },
               swapCommit: {
                 type: 'string',
                 format: 'cid',
-                description:
-                  'Compare and swap with the previous commit by cid.',
-              },
-            },
-          },
+                description: 'Compare and swap with the previous commit by cid.'
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -1677,22 +1676,22 @@ export const schemaDict = {
             properties: {
               uri: {
                 type: 'string',
-                format: 'at-uri',
+                format: 'at-uri'
               },
               cid: {
                 type: 'string',
-                format: 'cid',
-              },
-            },
-          },
+                format: 'cid'
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'InvalidSwap',
-          },
-        ],
-      },
-    },
+            name: 'InvalidSwap'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoRepoDeleteRecord: {
     lexicon: 1,
@@ -1710,39 +1709,37 @@ export const schemaDict = {
               repo: {
                 type: 'string',
                 format: 'at-identifier',
-                description: 'The handle or DID of the repo.',
+                description: 'The handle or DID of the repo.'
               },
               collection: {
                 type: 'string',
                 format: 'nsid',
-                description: 'The NSID of the record collection.',
+                description: 'The NSID of the record collection.'
               },
               rkey: {
                 type: 'string',
-                description: 'The key of the record.',
+                description: 'The key of the record.'
               },
               swapRecord: {
                 type: 'string',
                 format: 'cid',
-                description:
-                  'Compare and swap with the previous record by cid.',
+                description: 'Compare and swap with the previous record by cid.'
               },
               swapCommit: {
                 type: 'string',
                 format: 'cid',
-                description:
-                  'Compare and swap with the previous commit by cid.',
-              },
-            },
-          },
+                description: 'Compare and swap with the previous commit by cid.'
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'InvalidSwap',
-          },
-        ],
-      },
-    },
+            name: 'InvalidSwap'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoRepoDescribeRepo: {
     lexicon: 1,
@@ -1759,9 +1756,9 @@ export const schemaDict = {
             repo: {
               type: 'string',
               format: 'at-identifier',
-              description: 'The handle or DID of the repo.',
-            },
-          },
+              description: 'The handle or DID of the repo.'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -1772,35 +1769,35 @@ export const schemaDict = {
               'did',
               'didDoc',
               'collections',
-              'handleIsCorrect',
+              'handleIsCorrect'
             ],
             properties: {
               handle: {
                 type: 'string',
-                format: 'handle',
+                format: 'handle'
               },
               did: {
                 type: 'string',
-                format: 'did',
+                format: 'did'
               },
               didDoc: {
-                type: 'unknown',
+                type: 'unknown'
               },
               collections: {
                 type: 'array',
                 items: {
                   type: 'string',
-                  format: 'nsid',
-                },
+                  format: 'nsid'
+                }
               },
               handleIsCorrect: {
-                type: 'boolean',
-              },
-            },
-          },
-        },
-      },
-    },
+                type: 'boolean'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoRepoGetRecord: {
     lexicon: 1,
@@ -1816,24 +1813,24 @@ export const schemaDict = {
             repo: {
               type: 'string',
               format: 'at-identifier',
-              description: 'The handle or DID of the repo.',
+              description: 'The handle or DID of the repo.'
             },
             collection: {
               type: 'string',
               format: 'nsid',
-              description: 'The NSID of the record collection.',
+              description: 'The NSID of the record collection.'
             },
             rkey: {
               type: 'string',
-              description: 'The key of the record.',
+              description: 'The key of the record.'
             },
             cid: {
               type: 'string',
               format: 'cid',
               description:
-                'The CID of the version of the record. If not specified, then return the most recent version.',
-            },
-          },
+                'The CID of the version of the record. If not specified, then return the most recent version.'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -1843,20 +1840,20 @@ export const schemaDict = {
             properties: {
               uri: {
                 type: 'string',
-                format: 'at-uri',
+                format: 'at-uri'
               },
               cid: {
                 type: 'string',
-                format: 'cid',
+                format: 'cid'
               },
               value: {
-                type: 'unknown',
-              },
-            },
-          },
-        },
-      },
-    },
+                type: 'unknown'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoRepoListRecords: {
     lexicon: 1,
@@ -1872,38 +1869,38 @@ export const schemaDict = {
             repo: {
               type: 'string',
               format: 'at-identifier',
-              description: 'The handle or DID of the repo.',
+              description: 'The handle or DID of the repo.'
             },
             collection: {
               type: 'string',
               format: 'nsid',
-              description: 'The NSID of the record type.',
+              description: 'The NSID of the record type.'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
               default: 50,
-              description: 'The number of records to return.',
+              description: 'The number of records to return.'
             },
             cursor: {
-              type: 'string',
+              type: 'string'
             },
             rkeyStart: {
               type: 'string',
               description:
-                'DEPRECATED: The lowest sort-ordered rkey to start from (exclusive)',
+                'DEPRECATED: The lowest sort-ordered rkey to start from (exclusive)'
             },
             rkeyEnd: {
               type: 'string',
               description:
-                'DEPRECATED: The highest sort-ordered rkey to stop at (exclusive)',
+                'DEPRECATED: The highest sort-ordered rkey to stop at (exclusive)'
             },
             reverse: {
               type: 'boolean',
-              description: 'Reverse the order of the returned records?',
-            },
-          },
+              description: 'Reverse the order of the returned records?'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -1912,18 +1909,18 @@ export const schemaDict = {
             required: ['records'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               records: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:com.atproto.repo.listRecords#record',
-                },
-              },
-            },
-          },
-        },
+                  ref: 'lex:com.atproto.repo.listRecords#record'
+                }
+              }
+            }
+          }
+        }
       },
       record: {
         type: 'object',
@@ -1931,18 +1928,18 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           cid: {
             type: 'string',
-            format: 'cid',
+            format: 'cid'
           },
           value: {
-            type: 'unknown',
-          },
-        },
-      },
-    },
+            type: 'unknown'
+          }
+        }
+      }
+    }
   },
   ComAtprotoRepoPutRecord: {
     lexicon: 1,
@@ -1961,40 +1958,38 @@ export const schemaDict = {
               repo: {
                 type: 'string',
                 format: 'at-identifier',
-                description: 'The handle or DID of the repo.',
+                description: 'The handle or DID of the repo.'
               },
               collection: {
                 type: 'string',
                 format: 'nsid',
-                description: 'The NSID of the record collection.',
+                description: 'The NSID of the record collection.'
               },
               rkey: {
                 type: 'string',
-                description: 'The key of the record.',
+                description: 'The key of the record.'
               },
               validate: {
                 type: 'boolean',
                 default: true,
-                description: 'Validate the record?',
+                description: 'Validate the record?'
               },
               record: {
                 type: 'unknown',
-                description: 'The record to write.',
+                description: 'The record to write.'
               },
               swapRecord: {
                 type: 'string',
                 format: 'cid',
-                description:
-                  'Compare and swap with the previous record by cid.',
+                description: 'Compare and swap with the previous record by cid.'
               },
               swapCommit: {
                 type: 'string',
                 format: 'cid',
-                description:
-                  'Compare and swap with the previous commit by cid.',
-              },
-            },
-          },
+                description: 'Compare and swap with the previous commit by cid.'
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -2004,22 +1999,22 @@ export const schemaDict = {
             properties: {
               uri: {
                 type: 'string',
-                format: 'at-uri',
+                format: 'at-uri'
               },
               cid: {
                 type: 'string',
-                format: 'cid',
-              },
-            },
-          },
+                format: 'cid'
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'InvalidSwap',
-          },
-        ],
-      },
-    },
+            name: 'InvalidSwap'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoRepoRebaseRepo: {
     lexicon: 1,
@@ -2037,24 +2032,23 @@ export const schemaDict = {
               repo: {
                 type: 'string',
                 format: 'at-identifier',
-                description: 'The handle or DID of the repo.',
+                description: 'The handle or DID of the repo.'
               },
               swapCommit: {
                 type: 'string',
                 format: 'cid',
-                description:
-                  'Compare and swap with the previous commit by cid.',
-              },
-            },
-          },
+                description: 'Compare and swap with the previous commit by cid.'
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'InvalidSwap',
-          },
-        ],
-      },
-    },
+            name: 'InvalidSwap'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoRepoStrongRef: {
     lexicon: 1,
@@ -2067,15 +2061,15 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           cid: {
             type: 'string',
-            format: 'cid',
-          },
-        },
-      },
-    },
+            format: 'cid'
+          }
+        }
+      }
+    }
   },
   ComAtprotoRepoUploadBlob: {
     lexicon: 1,
@@ -2086,7 +2080,7 @@ export const schemaDict = {
         description:
           'Upload a new blob to be added to repo in a later request.',
         input: {
-          encoding: '*/*',
+          encoding: '*/*'
         },
         output: {
           encoding: 'application/json',
@@ -2095,13 +2089,13 @@ export const schemaDict = {
             required: ['blob'],
             properties: {
               blob: {
-                type: 'blob',
-              },
-            },
-          },
-        },
-      },
-    },
+                type: 'blob'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoServerCreateAccount: {
     lexicon: 1,
@@ -2117,27 +2111,27 @@ export const schemaDict = {
             required: ['handle', 'email', 'password'],
             properties: {
               email: {
-                type: 'string',
+                type: 'string'
               },
               handle: {
                 type: 'string',
-                format: 'handle',
+                format: 'handle'
               },
               did: {
                 type: 'string',
-                format: 'did',
+                format: 'did'
               },
               inviteCode: {
-                type: 'string',
+                type: 'string'
               },
               password: {
-                type: 'string',
+                type: 'string'
               },
               recoveryKey: {
-                type: 'string',
-              },
-            },
-          },
+                type: 'string'
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -2146,47 +2140,47 @@ export const schemaDict = {
             required: ['accessJwt', 'refreshJwt', 'handle', 'did'],
             properties: {
               accessJwt: {
-                type: 'string',
+                type: 'string'
               },
               refreshJwt: {
-                type: 'string',
+                type: 'string'
               },
               handle: {
                 type: 'string',
-                format: 'handle',
+                format: 'handle'
               },
               did: {
                 type: 'string',
-                format: 'did',
-              },
-            },
-          },
+                format: 'did'
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'InvalidHandle',
+            name: 'InvalidHandle'
           },
           {
-            name: 'InvalidPassword',
+            name: 'InvalidPassword'
           },
           {
-            name: 'InvalidInviteCode',
+            name: 'InvalidInviteCode'
           },
           {
-            name: 'HandleNotAvailable',
+            name: 'HandleNotAvailable'
           },
           {
-            name: 'UnsupportedDomain',
+            name: 'UnsupportedDomain'
           },
           {
-            name: 'UnresolvableDid',
+            name: 'UnresolvableDid'
           },
           {
-            name: 'IncompatibleDidDoc',
-          },
-        ],
-      },
-    },
+            name: 'IncompatibleDidDoc'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoServerCreateAppPassword: {
     lexicon: 1,
@@ -2202,41 +2196,41 @@ export const schemaDict = {
             required: ['name'],
             properties: {
               name: {
-                type: 'string',
-              },
-            },
-          },
+                type: 'string'
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
           schema: {
             type: 'ref',
-            ref: 'lex:com.atproto.server.createAppPassword#appPassword',
-          },
+            ref: 'lex:com.atproto.server.createAppPassword#appPassword'
+          }
         },
         errors: [
           {
-            name: 'AccountTakedown',
-          },
-        ],
+            name: 'AccountTakedown'
+          }
+        ]
       },
       appPassword: {
         type: 'object',
         required: ['name', 'password', 'createdAt'],
         properties: {
           name: {
-            type: 'string',
+            type: 'string'
           },
           password: {
-            type: 'string',
+            type: 'string'
           },
           createdAt: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
-      },
-    },
+            format: 'datetime'
+          }
+        }
+      }
+    }
   },
   ComAtprotoServerCreateInviteCode: {
     lexicon: 1,
@@ -2252,14 +2246,14 @@ export const schemaDict = {
             required: ['useCount'],
             properties: {
               useCount: {
-                type: 'integer',
+                type: 'integer'
               },
               forAccount: {
                 type: 'string',
-                format: 'did',
-              },
-            },
-          },
+                format: 'did'
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -2268,13 +2262,13 @@ export const schemaDict = {
             required: ['code'],
             properties: {
               code: {
-                type: 'string',
-              },
-            },
-          },
-        },
-      },
-    },
+                type: 'string'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoServerCreateInviteCodes: {
     lexicon: 1,
@@ -2291,20 +2285,20 @@ export const schemaDict = {
             properties: {
               codeCount: {
                 type: 'integer',
-                default: 1,
+                default: 1
               },
               useCount: {
-                type: 'integer',
+                type: 'integer'
               },
               forAccounts: {
                 type: 'array',
                 items: {
                   type: 'string',
-                  format: 'did',
-                },
-              },
-            },
-          },
+                  format: 'did'
+                }
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -2316,29 +2310,29 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:com.atproto.server.createInviteCodes#accountCodes',
-                },
-              },
-            },
-          },
-        },
+                  ref: 'lex:com.atproto.server.createInviteCodes#accountCodes'
+                }
+              }
+            }
+          }
+        }
       },
       accountCodes: {
         type: 'object',
         required: ['account', 'codes'],
         properties: {
           account: {
-            type: 'string',
+            type: 'string'
           },
           codes: {
             type: 'array',
             items: {
-              type: 'string',
-            },
-          },
-        },
-      },
-    },
+              type: 'string'
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoServerCreateSession: {
     lexicon: 1,
@@ -2356,13 +2350,13 @@ export const schemaDict = {
               identifier: {
                 type: 'string',
                 description:
-                  'Handle or other identifier supported by the server for the authenticating user.',
+                  'Handle or other identifier supported by the server for the authenticating user.'
               },
               password: {
-                type: 'string',
-              },
-            },
-          },
+                type: 'string'
+              }
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -2371,32 +2365,32 @@ export const schemaDict = {
             required: ['accessJwt', 'refreshJwt', 'handle', 'did'],
             properties: {
               accessJwt: {
-                type: 'string',
+                type: 'string'
               },
               refreshJwt: {
-                type: 'string',
+                type: 'string'
               },
               handle: {
                 type: 'string',
-                format: 'handle',
+                format: 'handle'
               },
               did: {
                 type: 'string',
-                format: 'did',
+                format: 'did'
               },
               email: {
-                type: 'string',
-              },
-            },
-          },
+                type: 'string'
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'AccountTakedown',
-          },
-        ],
-      },
-    },
+            name: 'AccountTakedown'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoServerDefs: {
     lexicon: 1,
@@ -2411,36 +2405,36 @@ export const schemaDict = {
           'forAccount',
           'createdBy',
           'createdAt',
-          'uses',
+          'uses'
         ],
         properties: {
           code: {
-            type: 'string',
+            type: 'string'
           },
           available: {
-            type: 'integer',
+            type: 'integer'
           },
           disabled: {
-            type: 'boolean',
+            type: 'boolean'
           },
           forAccount: {
-            type: 'string',
+            type: 'string'
           },
           createdBy: {
-            type: 'string',
+            type: 'string'
           },
           createdAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           uses: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.server.defs#inviteCodeUse',
-            },
-          },
-        },
+              ref: 'lex:com.atproto.server.defs#inviteCodeUse'
+            }
+          }
+        }
       },
       inviteCodeUse: {
         type: 'object',
@@ -2448,15 +2442,15 @@ export const schemaDict = {
         properties: {
           usedBy: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           usedAt: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
-      },
-    },
+            format: 'datetime'
+          }
+        }
+      }
+    }
   },
   ComAtprotoServerDeleteAccount: {
     lexicon: 1,
@@ -2473,27 +2467,27 @@ export const schemaDict = {
             properties: {
               did: {
                 type: 'string',
-                format: 'did',
+                format: 'did'
               },
               password: {
-                type: 'string',
+                type: 'string'
               },
               token: {
-                type: 'string',
-              },
-            },
-          },
+                type: 'string'
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'ExpiredToken',
+            name: 'ExpiredToken'
           },
           {
-            name: 'InvalidToken',
-          },
-        ],
-      },
-    },
+            name: 'InvalidToken'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoServerDeleteSession: {
     lexicon: 1,
@@ -2501,9 +2495,9 @@ export const schemaDict = {
     defs: {
       main: {
         type: 'procedure',
-        description: 'Delete the current session.',
-      },
-    },
+        description: 'Delete the current session.'
+      }
+    }
   },
   ComAtprotoServerDescribeServer: {
     lexicon: 1,
@@ -2520,34 +2514,34 @@ export const schemaDict = {
             required: ['availableUserDomains'],
             properties: {
               inviteCodeRequired: {
-                type: 'boolean',
+                type: 'boolean'
               },
               availableUserDomains: {
                 type: 'array',
                 items: {
-                  type: 'string',
-                },
+                  type: 'string'
+                }
               },
               links: {
                 type: 'ref',
-                ref: 'lex:com.atproto.server.describeServer#links',
-              },
-            },
-          },
-        },
+                ref: 'lex:com.atproto.server.describeServer#links'
+              }
+            }
+          }
+        }
       },
       links: {
         type: 'object',
         properties: {
           privacyPolicy: {
-            type: 'string',
+            type: 'string'
           },
           termsOfService: {
-            type: 'string',
-          },
-        },
-      },
-    },
+            type: 'string'
+          }
+        }
+      }
+    }
   },
   ComAtprotoServerGetAccountInviteCodes: {
     lexicon: 1,
@@ -2561,13 +2555,13 @@ export const schemaDict = {
           properties: {
             includeUsed: {
               type: 'boolean',
-              default: true,
+              default: true
             },
             createAvailable: {
               type: 'boolean',
-              default: true,
-            },
-          },
+              default: true
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -2579,19 +2573,19 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:com.atproto.server.defs#inviteCode',
-                },
-              },
-            },
-          },
+                  ref: 'lex:com.atproto.server.defs#inviteCode'
+                }
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'DuplicateCreate',
-          },
-        ],
-      },
-    },
+            name: 'DuplicateCreate'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoServerGetSession: {
     lexicon: 1,
@@ -2608,20 +2602,20 @@ export const schemaDict = {
             properties: {
               handle: {
                 type: 'string',
-                format: 'handle',
+                format: 'handle'
               },
               did: {
                 type: 'string',
-                format: 'did',
+                format: 'did'
               },
               email: {
-                type: 'string',
-              },
-            },
-          },
-        },
-      },
-    },
+                type: 'string'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoServerListAppPasswords: {
     lexicon: 1,
@@ -2640,32 +2634,32 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:com.atproto.server.listAppPasswords#appPassword',
-                },
-              },
-            },
-          },
+                  ref: 'lex:com.atproto.server.listAppPasswords#appPassword'
+                }
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'AccountTakedown',
-          },
-        ],
+            name: 'AccountTakedown'
+          }
+        ]
       },
       appPassword: {
         type: 'object',
         required: ['name', 'createdAt'],
         properties: {
           name: {
-            type: 'string',
+            type: 'string'
           },
           createdAt: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
-      },
-    },
+            format: 'datetime'
+          }
+        }
+      }
+    }
   },
   ComAtprotoServerRefreshSession: {
     lexicon: 1,
@@ -2681,29 +2675,29 @@ export const schemaDict = {
             required: ['accessJwt', 'refreshJwt', 'handle', 'did'],
             properties: {
               accessJwt: {
-                type: 'string',
+                type: 'string'
               },
               refreshJwt: {
-                type: 'string',
+                type: 'string'
               },
               handle: {
                 type: 'string',
-                format: 'handle',
+                format: 'handle'
               },
               did: {
                 type: 'string',
-                format: 'did',
-              },
-            },
-          },
+                format: 'did'
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'AccountTakedown',
-          },
-        ],
-      },
-    },
+            name: 'AccountTakedown'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoServerRequestAccountDelete: {
     lexicon: 1,
@@ -2711,9 +2705,9 @@ export const schemaDict = {
     defs: {
       main: {
         type: 'procedure',
-        description: 'Initiate a user account deletion via email.',
-      },
-    },
+        description: 'Initiate a user account deletion via email.'
+      }
+    }
   },
   ComAtprotoServerRequestPasswordReset: {
     lexicon: 1,
@@ -2729,13 +2723,13 @@ export const schemaDict = {
             required: ['email'],
             properties: {
               email: {
-                type: 'string',
-              },
-            },
-          },
-        },
-      },
-    },
+                type: 'string'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoServerResetPassword: {
     lexicon: 1,
@@ -2751,24 +2745,24 @@ export const schemaDict = {
             required: ['token', 'password'],
             properties: {
               token: {
-                type: 'string',
+                type: 'string'
               },
               password: {
-                type: 'string',
-              },
-            },
-          },
+                type: 'string'
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'ExpiredToken',
+            name: 'ExpiredToken'
           },
           {
-            name: 'InvalidToken',
-          },
-        ],
-      },
-    },
+            name: 'InvalidToken'
+          }
+        ]
+      }
+    }
   },
   ComAtprotoServerRevokeAppPassword: {
     lexicon: 1,
@@ -2784,13 +2778,13 @@ export const schemaDict = {
             required: ['name'],
             properties: {
               name: {
-                type: 'string',
-              },
-            },
-          },
-        },
-      },
-    },
+                type: 'string'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoSyncGetBlob: {
     lexicon: 1,
@@ -2806,20 +2800,20 @@ export const schemaDict = {
             did: {
               type: 'string',
               format: 'did',
-              description: 'The DID of the repo.',
+              description: 'The DID of the repo.'
             },
             cid: {
               type: 'string',
               format: 'cid',
-              description: 'The CID of the blob to fetch',
-            },
-          },
+              description: 'The CID of the blob to fetch'
+            }
+          }
         },
         output: {
-          encoding: '*/*',
-        },
-      },
-    },
+          encoding: '*/*'
+        }
+      }
+    }
   },
   ComAtprotoSyncGetBlocks: {
     lexicon: 1,
@@ -2835,22 +2829,22 @@ export const schemaDict = {
             did: {
               type: 'string',
               format: 'did',
-              description: 'The DID of the repo.',
+              description: 'The DID of the repo.'
             },
             cids: {
               type: 'array',
               items: {
                 type: 'string',
-                format: 'cid',
-              },
-            },
-          },
+                format: 'cid'
+              }
+            }
+          }
         },
         output: {
-          encoding: 'application/vnd.ipld.car',
-        },
-      },
-    },
+          encoding: 'application/vnd.ipld.car'
+        }
+      }
+    }
   },
   ComAtprotoSyncGetCheckout: {
     lexicon: 1,
@@ -2866,21 +2860,21 @@ export const schemaDict = {
             did: {
               type: 'string',
               format: 'did',
-              description: 'The DID of the repo.',
+              description: 'The DID of the repo.'
             },
             commit: {
               type: 'string',
               format: 'cid',
               description:
-                'The commit to get the checkout from. Defaults to current HEAD.',
-            },
-          },
+                'The commit to get the checkout from. Defaults to current HEAD.'
+            }
+          }
         },
         output: {
-          encoding: 'application/vnd.ipld.car',
-        },
-      },
-    },
+          encoding: 'application/vnd.ipld.car'
+        }
+      }
+    }
   },
   ComAtprotoSyncGetCommitPath: {
     lexicon: 1,
@@ -2896,19 +2890,19 @@ export const schemaDict = {
             did: {
               type: 'string',
               format: 'did',
-              description: 'The DID of the repo.',
+              description: 'The DID of the repo.'
             },
             latest: {
               type: 'string',
               format: 'cid',
-              description: 'The most recent commit',
+              description: 'The most recent commit'
             },
             earliest: {
               type: 'string',
               format: 'cid',
-              description: 'The earliest commit to start from',
-            },
-          },
+              description: 'The earliest commit to start from'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -2920,14 +2914,14 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'string',
-                  format: 'cid',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  format: 'cid'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoSyncGetHead: {
     lexicon: 1,
@@ -2943,9 +2937,9 @@ export const schemaDict = {
             did: {
               type: 'string',
               format: 'did',
-              description: 'The DID of the repo.',
-            },
-          },
+              description: 'The DID of the repo.'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -2955,13 +2949,13 @@ export const schemaDict = {
             properties: {
               root: {
                 type: 'string',
-                format: 'cid',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'cid'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoSyncGetRecord: {
     lexicon: 1,
@@ -2978,27 +2972,27 @@ export const schemaDict = {
             did: {
               type: 'string',
               format: 'did',
-              description: 'The DID of the repo.',
+              description: 'The DID of the repo.'
             },
             collection: {
               type: 'string',
-              format: 'nsid',
+              format: 'nsid'
             },
             rkey: {
-              type: 'string',
+              type: 'string'
             },
             commit: {
               type: 'string',
               format: 'cid',
-              description: 'An optional past commit CID.',
-            },
-          },
+              description: 'An optional past commit CID.'
+            }
+          }
         },
         output: {
-          encoding: 'application/vnd.ipld.car',
-        },
-      },
-    },
+          encoding: 'application/vnd.ipld.car'
+        }
+      }
+    }
   },
   ComAtprotoSyncGetRepo: {
     lexicon: 1,
@@ -3014,26 +3008,26 @@ export const schemaDict = {
             did: {
               type: 'string',
               format: 'did',
-              description: 'The DID of the repo.',
+              description: 'The DID of the repo.'
             },
             earliest: {
               type: 'string',
               format: 'cid',
               description:
-                'The earliest commit in the commit range (not inclusive)',
+                'The earliest commit in the commit range (not inclusive)'
             },
             latest: {
               type: 'string',
               format: 'cid',
-              description: 'The latest commit in the commit range (inclusive)',
-            },
-          },
+              description: 'The latest commit in the commit range (inclusive)'
+            }
+          }
         },
         output: {
-          encoding: 'application/vnd.ipld.car',
-        },
-      },
-    },
+          encoding: 'application/vnd.ipld.car'
+        }
+      }
+    }
   },
   ComAtprotoSyncListBlobs: {
     lexicon: 1,
@@ -3049,19 +3043,19 @@ export const schemaDict = {
             did: {
               type: 'string',
               format: 'did',
-              description: 'The DID of the repo.',
+              description: 'The DID of the repo.'
             },
             latest: {
               type: 'string',
               format: 'cid',
-              description: 'The most recent commit',
+              description: 'The most recent commit'
             },
             earliest: {
               type: 'string',
               format: 'cid',
-              description: 'The earliest commit to start from',
-            },
-          },
+              description: 'The earliest commit to start from'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -3073,14 +3067,14 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'string',
-                  format: 'cid',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  format: 'cid'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoSyncListRepos: {
     lexicon: 1,
@@ -3096,12 +3090,12 @@ export const schemaDict = {
               type: 'integer',
               minimum: 1,
               maximum: 1000,
-              default: 500,
+              default: 500
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -3110,18 +3104,18 @@ export const schemaDict = {
             required: ['repos'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               repos: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:com.atproto.sync.listRepos#repo',
-                },
-              },
-            },
-          },
-        },
+                  ref: 'lex:com.atproto.sync.listRepos#repo'
+                }
+              }
+            }
+          }
+        }
       },
       repo: {
         type: 'object',
@@ -3129,15 +3123,15 @@ export const schemaDict = {
         properties: {
           did: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           head: {
             type: 'string',
-            format: 'cid',
-          },
-        },
-      },
-    },
+            format: 'cid'
+          }
+        }
+      }
+    }
   },
   ComAtprotoSyncNotifyOfUpdate: {
     lexicon: 1,
@@ -3154,12 +3148,12 @@ export const schemaDict = {
             hostname: {
               type: 'string',
               description:
-                'Hostname of the service that is notifying of update.',
-            },
-          },
-        },
-      },
-    },
+                'Hostname of the service that is notifying of update.'
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoSyncRequestCrawl: {
     lexicon: 1,
@@ -3175,12 +3169,12 @@ export const schemaDict = {
             hostname: {
               type: 'string',
               description:
-                'Hostname of the service that is requesting to be crawled.',
-            },
-          },
-        },
-      },
-    },
+                'Hostname of the service that is requesting to be crawled.'
+            }
+          }
+        }
+      }
+    }
   },
   ComAtprotoSyncSubscribeRepos: {
     lexicon: 1,
@@ -3194,9 +3188,9 @@ export const schemaDict = {
           properties: {
             cursor: {
               type: 'integer',
-              description: 'The last known event to backfill from.',
-            },
-          },
+              description: 'The last known event to backfill from.'
+            }
+          }
         },
         message: {
           schema: {
@@ -3206,15 +3200,15 @@ export const schemaDict = {
               'lex:com.atproto.sync.subscribeRepos#handle',
               'lex:com.atproto.sync.subscribeRepos#migrate',
               'lex:com.atproto.sync.subscribeRepos#tombstone',
-              'lex:com.atproto.sync.subscribeRepos#info',
-            ],
-          },
+              'lex:com.atproto.sync.subscribeRepos#info'
+            ]
+          }
         },
         errors: [
           {
-            name: 'FutureCursor',
-          },
-        ],
+            name: 'FutureCursor'
+          }
+        ]
       },
       commit: {
         type: 'object',
@@ -3228,74 +3222,74 @@ export const schemaDict = {
           'blocks',
           'ops',
           'blobs',
-          'time',
+          'time'
         ],
         nullable: ['prev'],
         properties: {
           seq: {
-            type: 'integer',
+            type: 'integer'
           },
           rebase: {
-            type: 'boolean',
+            type: 'boolean'
           },
           tooBig: {
-            type: 'boolean',
+            type: 'boolean'
           },
           repo: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           commit: {
-            type: 'cid-link',
+            type: 'cid-link'
           },
           prev: {
-            type: 'cid-link',
+            type: 'cid-link'
           },
           blocks: {
             type: 'bytes',
             description: 'CAR file containing relevant blocks',
-            maxLength: 1000000,
+            maxLength: 1000000
           },
           ops: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.sync.subscribeRepos#repoOp',
+              ref: 'lex:com.atproto.sync.subscribeRepos#repoOp'
             },
-            maxLength: 200,
+            maxLength: 200
           },
           blobs: {
             type: 'array',
             items: {
-              type: 'cid-link',
-            },
+              type: 'cid-link'
+            }
           },
           time: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
+            format: 'datetime'
+          }
+        }
       },
       handle: {
         type: 'object',
         required: ['seq', 'did', 'handle', 'time'],
         properties: {
           seq: {
-            type: 'integer',
+            type: 'integer'
           },
           did: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           handle: {
             type: 'string',
-            format: 'handle',
+            format: 'handle'
           },
           time: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
+            format: 'datetime'
+          }
+        }
       },
       migrate: {
         type: 'object',
@@ -3303,37 +3297,37 @@ export const schemaDict = {
         nullable: ['migrateTo'],
         properties: {
           seq: {
-            type: 'integer',
+            type: 'integer'
           },
           did: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           migrateTo: {
-            type: 'string',
+            type: 'string'
           },
           time: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
+            format: 'datetime'
+          }
+        }
       },
       tombstone: {
         type: 'object',
         required: ['seq', 'did', 'time'],
         properties: {
           seq: {
-            type: 'integer',
+            type: 'integer'
           },
           did: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           time: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
+            format: 'datetime'
+          }
+        }
       },
       info: {
         type: 'object',
@@ -3341,12 +3335,12 @@ export const schemaDict = {
         properties: {
           name: {
             type: 'string',
-            knownValues: ['OutdatedCursor'],
+            knownValues: ['OutdatedCursor']
           },
           message: {
-            type: 'string',
-          },
-        },
+            type: 'string'
+          }
+        }
       },
       repoOp: {
         type: 'object',
@@ -3355,17 +3349,17 @@ export const schemaDict = {
         properties: {
           action: {
             type: 'string',
-            knownValues: ['create', 'update', 'delete'],
+            knownValues: ['create', 'update', 'delete']
           },
           path: {
-            type: 'string',
+            type: 'string'
           },
           cid: {
-            type: 'cid-link',
-          },
-        },
-      },
-    },
+            type: 'cid-link'
+          }
+        }
+      }
+    }
   },
   AppBskyActorDefs: {
     lexicon: 1,
@@ -3378,32 +3372,32 @@ export const schemaDict = {
         properties: {
           did: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           handle: {
             type: 'string',
-            format: 'handle',
+            format: 'handle'
           },
           displayName: {
             type: 'string',
             maxGraphemes: 64,
-            maxLength: 640,
+            maxLength: 640
           },
           avatar: {
-            type: 'string',
+            type: 'string'
           },
           viewer: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#viewerState',
+            ref: 'lex:app.bsky.actor.defs#viewerState'
           },
           labels: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.label.defs#label',
-            },
-          },
-        },
+              ref: 'lex:com.atproto.label.defs#label'
+            }
+          }
+        }
       },
       profileView: {
         type: 'object',
@@ -3411,41 +3405,41 @@ export const schemaDict = {
         properties: {
           did: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           handle: {
             type: 'string',
-            format: 'handle',
+            format: 'handle'
           },
           displayName: {
             type: 'string',
             maxGraphemes: 64,
-            maxLength: 640,
+            maxLength: 640
           },
           description: {
             type: 'string',
             maxGraphemes: 256,
-            maxLength: 2560,
+            maxLength: 2560
           },
           avatar: {
-            type: 'string',
+            type: 'string'
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           viewer: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#viewerState',
+            ref: 'lex:app.bsky.actor.defs#viewerState'
           },
           labels: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.label.defs#label',
-            },
-          },
-        },
+              ref: 'lex:com.atproto.label.defs#label'
+            }
+          }
+        }
       },
       profileViewDetailed: {
         type: 'object',
@@ -3453,80 +3447,80 @@ export const schemaDict = {
         properties: {
           did: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           handle: {
             type: 'string',
-            format: 'handle',
+            format: 'handle'
           },
           displayName: {
             type: 'string',
             maxGraphemes: 64,
-            maxLength: 640,
+            maxLength: 640
           },
           description: {
             type: 'string',
             maxGraphemes: 256,
-            maxLength: 2560,
+            maxLength: 2560
           },
           avatar: {
-            type: 'string',
+            type: 'string'
           },
           banner: {
-            type: 'string',
+            type: 'string'
           },
           followersCount: {
-            type: 'integer',
+            type: 'integer'
           },
           followsCount: {
-            type: 'integer',
+            type: 'integer'
           },
           postsCount: {
-            type: 'integer',
+            type: 'integer'
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           viewer: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#viewerState',
+            ref: 'lex:app.bsky.actor.defs#viewerState'
           },
           labels: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.label.defs#label',
-            },
-          },
-        },
+              ref: 'lex:com.atproto.label.defs#label'
+            }
+          }
+        }
       },
       viewerState: {
         type: 'object',
         properties: {
           muted: {
-            type: 'boolean',
+            type: 'boolean'
           },
           mutedByList: {
             type: 'ref',
-            ref: 'lex:app.bsky.graph.defs#listViewBasic',
+            ref: 'lex:app.bsky.graph.defs#listViewBasic'
           },
           blockedBy: {
-            type: 'boolean',
+            type: 'boolean'
           },
           blocking: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           following: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           followedBy: {
             type: 'string',
-            format: 'at-uri',
-          },
-        },
+            format: 'at-uri'
+          }
+        }
       },
       preferences: {
         type: 'array',
@@ -3534,9 +3528,9 @@ export const schemaDict = {
           type: 'union',
           refs: [
             'lex:app.bsky.actor.defs#adultContentPref',
-            'lex:app.bsky.actor.defs#contentLabelPref',
-          ],
-        },
+            'lex:app.bsky.actor.defs#contentLabelPref'
+          ]
+        }
       },
       adultContentPref: {
         type: 'object',
@@ -3544,24 +3538,24 @@ export const schemaDict = {
         properties: {
           enabled: {
             type: 'boolean',
-            default: false,
-          },
-        },
+            default: false
+          }
+        }
       },
       contentLabelPref: {
         type: 'object',
         required: ['label', 'visibility'],
         properties: {
           label: {
-            type: 'string',
+            type: 'string'
           },
           visibility: {
             type: 'string',
-            knownValues: ['show', 'warn', 'hide'],
-          },
-        },
-      },
-    },
+            knownValues: ['show', 'warn', 'hide']
+          }
+        }
+      }
+    }
   },
   AppBskyActorGetPreferences: {
     lexicon: 1,
@@ -3572,7 +3566,7 @@ export const schemaDict = {
         description: 'Get private preferences attached to the account.',
         parameters: {
           type: 'params',
-          properties: {},
+          properties: {}
         },
         output: {
           encoding: 'application/json',
@@ -3582,13 +3576,13 @@ export const schemaDict = {
             properties: {
               preferences: {
                 type: 'ref',
-                ref: 'lex:app.bsky.actor.defs#preferences',
-              },
-            },
-          },
-        },
-      },
-    },
+                ref: 'lex:app.bsky.actor.defs#preferences'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyActorGetProfile: {
     lexicon: 1,
@@ -3602,19 +3596,19 @@ export const schemaDict = {
           properties: {
             actor: {
               type: 'string',
-              format: 'at-identifier',
-            },
-          },
+              format: 'at-identifier'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
           schema: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileViewDetailed',
-          },
-        },
-      },
-    },
+            ref: 'lex:app.bsky.actor.defs#profileViewDetailed'
+          }
+        }
+      }
+    }
   },
   AppBskyActorGetProfiles: {
     lexicon: 1,
@@ -3630,11 +3624,11 @@ export const schemaDict = {
               type: 'array',
               items: {
                 type: 'string',
-                format: 'at-identifier',
+                format: 'at-identifier'
               },
-              maxLength: 25,
-            },
-          },
+              maxLength: 25
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -3646,14 +3640,14 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.actor.defs#profileViewDetailed',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.actor.defs#profileViewDetailed'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyActorGetSuggestions: {
     lexicon: 1,
@@ -3670,12 +3664,12 @@ export const schemaDict = {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -3684,20 +3678,20 @@ export const schemaDict = {
             required: ['actors'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               actors: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.actor.defs#profileView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.actor.defs#profileView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyActorProfile: {
     lexicon: 1,
@@ -3712,27 +3706,27 @@ export const schemaDict = {
             displayName: {
               type: 'string',
               maxGraphemes: 64,
-              maxLength: 640,
+              maxLength: 640
             },
             description: {
               type: 'string',
               maxGraphemes: 256,
-              maxLength: 2560,
+              maxLength: 2560
             },
             avatar: {
               type: 'blob',
               accept: ['image/png', 'image/jpeg'],
-              maxSize: 1000000,
+              maxSize: 1000000
             },
             banner: {
               type: 'blob',
               accept: ['image/png', 'image/jpeg'],
-              maxSize: 1000000,
-            },
-          },
-        },
-      },
-    },
+              maxSize: 1000000
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyActorPutPreferences: {
     lexicon: 1,
@@ -3749,13 +3743,13 @@ export const schemaDict = {
             properties: {
               preferences: {
                 type: 'ref',
-                ref: 'lex:app.bsky.actor.defs#preferences',
-              },
-            },
-          },
-        },
-      },
-    },
+                ref: 'lex:app.bsky.actor.defs#preferences'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyActorSearchActors: {
     lexicon: 1,
@@ -3768,18 +3762,18 @@ export const schemaDict = {
           type: 'params',
           properties: {
             term: {
-              type: 'string',
+              type: 'string'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -3788,20 +3782,20 @@ export const schemaDict = {
             required: ['actors'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               actors: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.actor.defs#profileView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.actor.defs#profileView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyActorSearchActorsTypeahead: {
     lexicon: 1,
@@ -3814,15 +3808,15 @@ export const schemaDict = {
           type: 'params',
           properties: {
             term: {
-              type: 'string',
+              type: 'string'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
-            },
-          },
+              default: 50
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -3834,14 +3828,14 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.actor.defs#profileViewBasic',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.actor.defs#profileViewBasic'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyEmbedExternal: {
     lexicon: 1,
@@ -3855,9 +3849,9 @@ export const schemaDict = {
         properties: {
           external: {
             type: 'ref',
-            ref: 'lex:app.bsky.embed.external#external',
-          },
-        },
+            ref: 'lex:app.bsky.embed.external#external'
+          }
+        }
       },
       external: {
         type: 'object',
@@ -3865,20 +3859,20 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'uri',
+            format: 'uri'
           },
           title: {
-            type: 'string',
+            type: 'string'
           },
           description: {
-            type: 'string',
+            type: 'string'
           },
           thumb: {
             type: 'blob',
             accept: ['image/*'],
-            maxSize: 1000000,
-          },
-        },
+            maxSize: 1000000
+          }
+        }
       },
       view: {
         type: 'object',
@@ -3886,9 +3880,9 @@ export const schemaDict = {
         properties: {
           external: {
             type: 'ref',
-            ref: 'lex:app.bsky.embed.external#viewExternal',
-          },
-        },
+            ref: 'lex:app.bsky.embed.external#viewExternal'
+          }
+        }
       },
       viewExternal: {
         type: 'object',
@@ -3896,20 +3890,20 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'uri',
+            format: 'uri'
           },
           title: {
-            type: 'string',
+            type: 'string'
           },
           description: {
-            type: 'string',
+            type: 'string'
           },
           thumb: {
-            type: 'string',
-          },
-        },
-      },
-    },
+            type: 'string'
+          }
+        }
+      }
+    }
   },
   AppBskyEmbedImages: {
     lexicon: 1,
@@ -3924,11 +3918,11 @@ export const schemaDict = {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:app.bsky.embed.images#image',
+              ref: 'lex:app.bsky.embed.images#image'
             },
-            maxLength: 4,
-          },
-        },
+            maxLength: 4
+          }
+        }
       },
       image: {
         type: 'object',
@@ -3937,12 +3931,12 @@ export const schemaDict = {
           image: {
             type: 'blob',
             accept: ['image/*'],
-            maxSize: 1000000,
+            maxSize: 1000000
           },
           alt: {
-            type: 'string',
-          },
-        },
+            type: 'string'
+          }
+        }
       },
       view: {
         type: 'object',
@@ -3952,28 +3946,28 @@ export const schemaDict = {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:app.bsky.embed.images#viewImage',
+              ref: 'lex:app.bsky.embed.images#viewImage'
             },
-            maxLength: 4,
-          },
-        },
+            maxLength: 4
+          }
+        }
       },
       viewImage: {
         type: 'object',
         required: ['thumb', 'fullsize', 'alt'],
         properties: {
           thumb: {
-            type: 'string',
+            type: 'string'
           },
           fullsize: {
-            type: 'string',
+            type: 'string'
           },
           alt: {
-            type: 'string',
-          },
-        },
-      },
-    },
+            type: 'string'
+          }
+        }
+      }
+    }
   },
   AppBskyEmbedRecord: {
     lexicon: 1,
@@ -3987,9 +3981,9 @@ export const schemaDict = {
         properties: {
           record: {
             type: 'ref',
-            ref: 'lex:com.atproto.repo.strongRef',
-          },
-        },
+            ref: 'lex:com.atproto.repo.strongRef'
+          }
+        }
       },
       view: {
         type: 'object',
@@ -4001,10 +3995,10 @@ export const schemaDict = {
               'lex:app.bsky.embed.record#viewRecord',
               'lex:app.bsky.embed.record#viewNotFound',
               'lex:app.bsky.embed.record#viewBlocked',
-              'lex:app.bsky.feed.defs#generatorView',
-            ],
-          },
-        },
+              'lex:app.bsky.feed.defs#generatorView'
+            ]
+          }
+        }
       },
       viewRecord: {
         type: 'object',
@@ -4012,25 +4006,25 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           cid: {
             type: 'string',
-            format: 'cid',
+            format: 'cid'
           },
           author: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileViewBasic',
+            ref: 'lex:app.bsky.actor.defs#profileViewBasic'
           },
           value: {
-            type: 'unknown',
+            type: 'unknown'
           },
           labels: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.label.defs#label',
-            },
+              ref: 'lex:com.atproto.label.defs#label'
+            }
           },
           embeds: {
             type: 'array',
@@ -4040,15 +4034,15 @@ export const schemaDict = {
                 'lex:app.bsky.embed.images#view',
                 'lex:app.bsky.embed.external#view',
                 'lex:app.bsky.embed.record#view',
-                'lex:app.bsky.embed.recordWithMedia#view',
-              ],
-            },
+                'lex:app.bsky.embed.recordWithMedia#view'
+              ]
+            }
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
+            format: 'datetime'
+          }
+        }
       },
       viewNotFound: {
         type: 'object',
@@ -4056,9 +4050,9 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
-          },
-        },
+            format: 'at-uri'
+          }
+        }
       },
       viewBlocked: {
         type: 'object',
@@ -4066,11 +4060,11 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
-          },
-        },
-      },
-    },
+            format: 'at-uri'
+          }
+        }
+      }
+    }
   },
   AppBskyEmbedRecordWithMedia: {
     lexicon: 1,
@@ -4084,13 +4078,13 @@ export const schemaDict = {
         properties: {
           record: {
             type: 'ref',
-            ref: 'lex:app.bsky.embed.record',
+            ref: 'lex:app.bsky.embed.record'
           },
           media: {
             type: 'union',
-            refs: ['lex:app.bsky.embed.images', 'lex:app.bsky.embed.external'],
-          },
-        },
+            refs: ['lex:app.bsky.embed.images', 'lex:app.bsky.embed.external']
+          }
+        }
       },
       view: {
         type: 'object',
@@ -4098,18 +4092,18 @@ export const schemaDict = {
         properties: {
           record: {
             type: 'ref',
-            ref: 'lex:app.bsky.embed.record#view',
+            ref: 'lex:app.bsky.embed.record#view'
           },
           media: {
             type: 'union',
             refs: [
               'lex:app.bsky.embed.images#view',
-              'lex:app.bsky.embed.external#view',
-            ],
-          },
-        },
-      },
-    },
+              'lex:app.bsky.embed.external#view'
+            ]
+          }
+        }
+      }
+    }
   },
   AppBskyFeedDefs: {
     lexicon: 1,
@@ -4121,18 +4115,18 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           cid: {
             type: 'string',
-            format: 'cid',
+            format: 'cid'
           },
           author: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileViewBasic',
+            ref: 'lex:app.bsky.actor.defs#profileViewBasic'
           },
           record: {
-            type: 'unknown',
+            type: 'unknown'
           },
           embed: {
             type: 'union',
@@ -4140,47 +4134,47 @@ export const schemaDict = {
               'lex:app.bsky.embed.images#view',
               'lex:app.bsky.embed.external#view',
               'lex:app.bsky.embed.record#view',
-              'lex:app.bsky.embed.recordWithMedia#view',
-            ],
+              'lex:app.bsky.embed.recordWithMedia#view'
+            ]
           },
           replyCount: {
-            type: 'integer',
+            type: 'integer'
           },
           repostCount: {
-            type: 'integer',
+            type: 'integer'
           },
           likeCount: {
-            type: 'integer',
+            type: 'integer'
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           viewer: {
             type: 'ref',
-            ref: 'lex:app.bsky.feed.defs#viewerState',
+            ref: 'lex:app.bsky.feed.defs#viewerState'
           },
           labels: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.label.defs#label',
-            },
-          },
-        },
+              ref: 'lex:com.atproto.label.defs#label'
+            }
+          }
+        }
       },
       viewerState: {
         type: 'object',
         properties: {
           repost: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           like: {
             type: 'string',
-            format: 'at-uri',
-          },
-        },
+            format: 'at-uri'
+          }
+        }
       },
       feedViewPost: {
         type: 'object',
@@ -4188,17 +4182,17 @@ export const schemaDict = {
         properties: {
           post: {
             type: 'ref',
-            ref: 'lex:app.bsky.feed.defs#postView',
+            ref: 'lex:app.bsky.feed.defs#postView'
           },
           reply: {
             type: 'ref',
-            ref: 'lex:app.bsky.feed.defs#replyRef',
+            ref: 'lex:app.bsky.feed.defs#replyRef'
           },
           reason: {
             type: 'union',
-            refs: ['lex:app.bsky.feed.defs#reasonRepost'],
-          },
-        },
+            refs: ['lex:app.bsky.feed.defs#reasonRepost']
+          }
+        }
       },
       replyRef: {
         type: 'object',
@@ -4209,18 +4203,18 @@ export const schemaDict = {
             refs: [
               'lex:app.bsky.feed.defs#postView',
               'lex:app.bsky.feed.defs#notFoundPost',
-              'lex:app.bsky.feed.defs#blockedPost',
-            ],
+              'lex:app.bsky.feed.defs#blockedPost'
+            ]
           },
           parent: {
             type: 'union',
             refs: [
               'lex:app.bsky.feed.defs#postView',
               'lex:app.bsky.feed.defs#notFoundPost',
-              'lex:app.bsky.feed.defs#blockedPost',
-            ],
-          },
-        },
+              'lex:app.bsky.feed.defs#blockedPost'
+            ]
+          }
+        }
       },
       reasonRepost: {
         type: 'object',
@@ -4228,13 +4222,13 @@ export const schemaDict = {
         properties: {
           by: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileViewBasic',
+            ref: 'lex:app.bsky.actor.defs#profileViewBasic'
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
+            format: 'datetime'
+          }
+        }
       },
       threadViewPost: {
         type: 'object',
@@ -4242,15 +4236,15 @@ export const schemaDict = {
         properties: {
           post: {
             type: 'ref',
-            ref: 'lex:app.bsky.feed.defs#postView',
+            ref: 'lex:app.bsky.feed.defs#postView'
           },
           parent: {
             type: 'union',
             refs: [
               'lex:app.bsky.feed.defs#threadViewPost',
               'lex:app.bsky.feed.defs#notFoundPost',
-              'lex:app.bsky.feed.defs#blockedPost',
-            ],
+              'lex:app.bsky.feed.defs#blockedPost'
+            ]
           },
           replies: {
             type: 'array',
@@ -4259,11 +4253,11 @@ export const schemaDict = {
               refs: [
                 'lex:app.bsky.feed.defs#threadViewPost',
                 'lex:app.bsky.feed.defs#notFoundPost',
-                'lex:app.bsky.feed.defs#blockedPost',
-              ],
-            },
-          },
-        },
+                'lex:app.bsky.feed.defs#blockedPost'
+              ]
+            }
+          }
+        }
       },
       notFoundPost: {
         type: 'object',
@@ -4271,13 +4265,13 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           notFound: {
             type: 'boolean',
-            const: true,
-          },
-        },
+            const: true
+          }
+        }
       },
       blockedPost: {
         type: 'object',
@@ -4285,13 +4279,13 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           blocked: {
             type: 'boolean',
-            const: true,
-          },
-        },
+            const: true
+          }
+        }
       },
       generatorView: {
         type: 'object',
@@ -4299,63 +4293,63 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           cid: {
             type: 'string',
-            format: 'cid',
+            format: 'cid'
           },
           did: {
             type: 'string',
-            format: 'did',
+            format: 'did'
           },
           creator: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileView',
+            ref: 'lex:app.bsky.actor.defs#profileView'
           },
           displayName: {
-            type: 'string',
+            type: 'string'
           },
           description: {
             type: 'string',
             maxGraphemes: 300,
-            maxLength: 3000,
+            maxLength: 3000
           },
           descriptionFacets: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:app.bsky.richtext.facet',
-            },
+              ref: 'lex:app.bsky.richtext.facet'
+            }
           },
           avatar: {
-            type: 'string',
+            type: 'string'
           },
           likeCount: {
             type: 'integer',
-            minimum: 0,
+            minimum: 0
           },
           viewer: {
             type: 'ref',
-            ref: 'lex:app.bsky.feed.defs#generatorViewerState',
+            ref: 'lex:app.bsky.feed.defs#generatorViewerState'
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
+            format: 'datetime'
+          }
+        }
       },
       generatorViewerState: {
         type: 'object',
         properties: {
           saved: {
-            type: 'boolean',
+            type: 'boolean'
           },
           like: {
             type: 'string',
-            format: 'at-uri',
-          },
-        },
+            format: 'at-uri'
+          }
+        }
       },
       skeletonFeedPost: {
         type: 'object',
@@ -4363,13 +4357,13 @@ export const schemaDict = {
         properties: {
           post: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           reason: {
             type: 'union',
-            refs: ['lex:app.bsky.feed.defs#skeletonReasonRepost'],
-          },
-        },
+            refs: ['lex:app.bsky.feed.defs#skeletonReasonRepost']
+          }
+        }
       },
       skeletonReasonRepost: {
         type: 'object',
@@ -4377,11 +4371,11 @@ export const schemaDict = {
         properties: {
           repost: {
             type: 'string',
-            ref: 'at-uri',
-          },
-        },
-      },
-    },
+            ref: 'at-uri'
+          }
+        }
+      }
+    }
   },
   AppBskyFeedDescribeFeedGenerator: {
     lexicon: 1,
@@ -4399,22 +4393,22 @@ export const schemaDict = {
             properties: {
               did: {
                 type: 'string',
-                format: 'did',
+                format: 'did'
               },
               feeds: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.feed.describeFeedGenerator#feed',
-                },
+                  ref: 'lex:app.bsky.feed.describeFeedGenerator#feed'
+                }
               },
               links: {
                 type: 'ref',
-                ref: 'lex:app.bsky.feed.describeFeedGenerator#links',
-              },
-            },
-          },
-        },
+                ref: 'lex:app.bsky.feed.describeFeedGenerator#links'
+              }
+            }
+          }
+        }
       },
       feed: {
         type: 'object',
@@ -4422,22 +4416,22 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
-          },
-        },
+            format: 'at-uri'
+          }
+        }
       },
       links: {
         type: 'object',
         properties: {
           privacyPolicy: {
-            type: 'string',
+            type: 'string'
           },
           termsOfService: {
-            type: 'string',
-          },
-        },
-      },
-    },
+            type: 'string'
+          }
+        }
+      }
+    }
   },
   AppBskyFeedGenerator: {
     lexicon: 1,
@@ -4453,38 +4447,38 @@ export const schemaDict = {
           properties: {
             did: {
               type: 'string',
-              format: 'did',
+              format: 'did'
             },
             displayName: {
               type: 'string',
               maxGraphemes: 64,
-              maxLength: 640,
+              maxLength: 640
             },
             description: {
               type: 'string',
               maxGraphemes: 300,
-              maxLength: 3000,
+              maxLength: 3000
             },
             descriptionFacets: {
               type: 'array',
               items: {
                 type: 'ref',
-                ref: 'lex:app.bsky.richtext.facet',
-              },
+                ref: 'lex:app.bsky.richtext.facet'
+              }
             },
             avatar: {
               type: 'blob',
               accept: ['image/png', 'image/jpeg'],
-              maxSize: 1000000,
+              maxSize: 1000000
             },
             createdAt: {
               type: 'string',
-              format: 'datetime',
-            },
-          },
-        },
-      },
-    },
+              format: 'datetime'
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyFeedGetActorFeeds: {
     lexicon: 1,
@@ -4499,18 +4493,18 @@ export const schemaDict = {
           properties: {
             actor: {
               type: 'string',
-              format: 'at-identifier',
+              format: 'at-identifier'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -4519,20 +4513,20 @@ export const schemaDict = {
             required: ['feeds'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               feeds: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.feed.defs#generatorView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.feed.defs#generatorView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyFeedGetAuthorFeed: {
     lexicon: 1,
@@ -4547,18 +4541,18 @@ export const schemaDict = {
           properties: {
             actor: {
               type: 'string',
-              format: 'at-identifier',
+              format: 'at-identifier'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -4567,28 +4561,28 @@ export const schemaDict = {
             required: ['feed'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               feed: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.feed.defs#feedViewPost',
-                },
-              },
-            },
-          },
+                  ref: 'lex:app.bsky.feed.defs#feedViewPost'
+                }
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'BlockedActor',
+            name: 'BlockedActor'
           },
           {
-            name: 'BlockedByActor',
-          },
-        ],
-      },
-    },
+            name: 'BlockedByActor'
+          }
+        ]
+      }
+    }
   },
   AppBskyFeedGetFeed: {
     lexicon: 1,
@@ -4604,18 +4598,18 @@ export const schemaDict = {
           properties: {
             feed: {
               type: 'string',
-              format: 'at-uri',
+              format: 'at-uri'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -4624,25 +4618,25 @@ export const schemaDict = {
             required: ['feed'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               feed: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.feed.defs#feedViewPost',
-                },
-              },
-            },
-          },
+                  ref: 'lex:app.bsky.feed.defs#feedViewPost'
+                }
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'UnknownFeed',
-          },
-        ],
-      },
-    },
+            name: 'UnknownFeed'
+          }
+        ]
+      }
+    }
   },
   AppBskyFeedGetFeedGenerator: {
     lexicon: 1,
@@ -4658,9 +4652,9 @@ export const schemaDict = {
           properties: {
             feed: {
               type: 'string',
-              format: 'at-uri',
-            },
-          },
+              format: 'at-uri'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -4670,19 +4664,19 @@ export const schemaDict = {
             properties: {
               view: {
                 type: 'ref',
-                ref: 'lex:app.bsky.feed.defs#generatorView',
+                ref: 'lex:app.bsky.feed.defs#generatorView'
               },
               isOnline: {
-                type: 'boolean',
+                type: 'boolean'
               },
               isValid: {
-                type: 'boolean',
-              },
-            },
-          },
-        },
-      },
-    },
+                type: 'boolean'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyFeedGetFeedSkeleton: {
     lexicon: 1,
@@ -4697,18 +4691,18 @@ export const schemaDict = {
           properties: {
             feed: {
               type: 'string',
-              format: 'at-uri',
+              format: 'at-uri'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -4717,25 +4711,25 @@ export const schemaDict = {
             required: ['feed'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               feed: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.feed.defs#skeletonFeedPost',
-                },
-              },
-            },
-          },
+                  ref: 'lex:app.bsky.feed.defs#skeletonFeedPost'
+                }
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'UnknownFeed',
-          },
-        ],
-      },
-    },
+            name: 'UnknownFeed'
+          }
+        ]
+      }
+    }
   },
   AppBskyFeedGetLikes: {
     lexicon: 1,
@@ -4749,22 +4743,22 @@ export const schemaDict = {
           properties: {
             uri: {
               type: 'string',
-              format: 'at-uri',
+              format: 'at-uri'
             },
             cid: {
               type: 'string',
-              format: 'cid',
+              format: 'cid'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -4774,25 +4768,25 @@ export const schemaDict = {
             properties: {
               uri: {
                 type: 'string',
-                format: 'at-uri',
+                format: 'at-uri'
               },
               cid: {
                 type: 'string',
-                format: 'cid',
+                format: 'cid'
               },
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               likes: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.feed.getLikes#like',
-                },
-              },
-            },
-          },
-        },
+                  ref: 'lex:app.bsky.feed.getLikes#like'
+                }
+              }
+            }
+          }
+        }
       },
       like: {
         type: 'object',
@@ -4800,19 +4794,19 @@ export const schemaDict = {
         properties: {
           indexedAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           createdAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           actor: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileView',
-          },
-        },
-      },
-    },
+            ref: 'lex:app.bsky.actor.defs#profileView'
+          }
+        }
+      }
+    }
   },
   AppBskyFeedGetPostThread: {
     lexicon: 1,
@@ -4826,12 +4820,12 @@ export const schemaDict = {
           properties: {
             uri: {
               type: 'string',
-              format: 'at-uri',
+              format: 'at-uri'
             },
             depth: {
-              type: 'integer',
-            },
-          },
+              type: 'integer'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -4844,19 +4838,19 @@ export const schemaDict = {
                 refs: [
                   'lex:app.bsky.feed.defs#threadViewPost',
                   'lex:app.bsky.feed.defs#notFoundPost',
-                  'lex:app.bsky.feed.defs#blockedPost',
-                ],
-              },
-            },
-          },
+                  'lex:app.bsky.feed.defs#blockedPost'
+                ]
+              }
+            }
+          }
         },
         errors: [
           {
-            name: 'NotFound',
-          },
-        ],
-      },
-    },
+            name: 'NotFound'
+          }
+        ]
+      }
+    }
   },
   AppBskyFeedGetPosts: {
     lexicon: 1,
@@ -4873,11 +4867,11 @@ export const schemaDict = {
               type: 'array',
               items: {
                 type: 'string',
-                format: 'at-uri',
+                format: 'at-uri'
               },
-              maxLength: 25,
-            },
-          },
+              maxLength: 25
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -4889,14 +4883,14 @@ export const schemaDict = {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.feed.defs#postView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.feed.defs#postView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyFeedGetRepostedBy: {
     lexicon: 1,
@@ -4910,22 +4904,22 @@ export const schemaDict = {
           properties: {
             uri: {
               type: 'string',
-              format: 'at-uri',
+              format: 'at-uri'
             },
             cid: {
               type: 'string',
-              format: 'cid',
+              format: 'cid'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -4935,27 +4929,27 @@ export const schemaDict = {
             properties: {
               uri: {
                 type: 'string',
-                format: 'at-uri',
+                format: 'at-uri'
               },
               cid: {
                 type: 'string',
-                format: 'cid',
+                format: 'cid'
               },
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               repostedBy: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.actor.defs#profileView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.actor.defs#profileView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyFeedGetSavedFeeds: {
     lexicon: 1,
@@ -4971,12 +4965,12 @@ export const schemaDict = {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -4985,20 +4979,20 @@ export const schemaDict = {
             required: ['feeds'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               feeds: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.feed.defs#generatorView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.feed.defs#generatorView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyFeedGetTimeline: {
     lexicon: 1,
@@ -5011,18 +5005,18 @@ export const schemaDict = {
           type: 'params',
           properties: {
             algorithm: {
-              type: 'string',
+              type: 'string'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -5031,20 +5025,20 @@ export const schemaDict = {
             required: ['feed'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               feed: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.feed.defs#feedViewPost',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.feed.defs#feedViewPost'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyFeedLike: {
     lexicon: 1,
@@ -5059,16 +5053,16 @@ export const schemaDict = {
           properties: {
             subject: {
               type: 'ref',
-              ref: 'lex:com.atproto.repo.strongRef',
+              ref: 'lex:com.atproto.repo.strongRef'
             },
             createdAt: {
               type: 'string',
-              format: 'datetime',
-            },
-          },
-        },
-      },
-    },
+              format: 'datetime'
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyFeedPost: {
     lexicon: 1,
@@ -5084,26 +5078,26 @@ export const schemaDict = {
             text: {
               type: 'string',
               maxLength: 3000,
-              maxGraphemes: 300,
+              maxGraphemes: 300
             },
             entities: {
               type: 'array',
               description: 'Deprecated: replaced by app.bsky.richtext.facet.',
               items: {
                 type: 'ref',
-                ref: 'lex:app.bsky.feed.post#entity',
-              },
+                ref: 'lex:app.bsky.feed.post#entity'
+              }
             },
             facets: {
               type: 'array',
               items: {
                 type: 'ref',
-                ref: 'lex:app.bsky.richtext.facet',
-              },
+                ref: 'lex:app.bsky.richtext.facet'
+              }
             },
             reply: {
               type: 'ref',
-              ref: 'lex:app.bsky.feed.post#replyRef',
+              ref: 'lex:app.bsky.feed.post#replyRef'
             },
             embed: {
               type: 'union',
@@ -5111,15 +5105,15 @@ export const schemaDict = {
                 'lex:app.bsky.embed.images',
                 'lex:app.bsky.embed.external',
                 'lex:app.bsky.embed.record',
-                'lex:app.bsky.embed.recordWithMedia',
-              ],
+                'lex:app.bsky.embed.recordWithMedia'
+              ]
             },
             createdAt: {
               type: 'string',
-              format: 'datetime',
-            },
-          },
-        },
+              format: 'datetime'
+            }
+          }
+        }
       },
       replyRef: {
         type: 'object',
@@ -5127,13 +5121,13 @@ export const schemaDict = {
         properties: {
           root: {
             type: 'ref',
-            ref: 'lex:com.atproto.repo.strongRef',
+            ref: 'lex:com.atproto.repo.strongRef'
           },
           parent: {
             type: 'ref',
-            ref: 'lex:com.atproto.repo.strongRef',
-          },
-        },
+            ref: 'lex:com.atproto.repo.strongRef'
+          }
+        }
       },
       entity: {
         type: 'object',
@@ -5142,16 +5136,16 @@ export const schemaDict = {
         properties: {
           index: {
             type: 'ref',
-            ref: 'lex:app.bsky.feed.post#textSlice',
+            ref: 'lex:app.bsky.feed.post#textSlice'
           },
           type: {
             type: 'string',
-            description: "Expected values are 'mention' and 'link'.",
+            description: "Expected values are 'mention' and 'link'."
           },
           value: {
-            type: 'string',
-          },
-        },
+            type: 'string'
+          }
+        }
       },
       textSlice: {
         type: 'object',
@@ -5161,15 +5155,15 @@ export const schemaDict = {
         properties: {
           start: {
             type: 'integer',
-            minimum: 0,
+            minimum: 0
           },
           end: {
             type: 'integer',
-            minimum: 0,
-          },
-        },
-      },
-    },
+            minimum: 0
+          }
+        }
+      }
+    }
   },
   AppBskyFeedRepost: {
     lexicon: 1,
@@ -5184,16 +5178,16 @@ export const schemaDict = {
           properties: {
             subject: {
               type: 'ref',
-              ref: 'lex:com.atproto.repo.strongRef',
+              ref: 'lex:com.atproto.repo.strongRef'
             },
             createdAt: {
               type: 'string',
-              format: 'datetime',
-            },
-          },
-        },
-      },
-    },
+              format: 'datetime'
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyFeedSaveFeed: {
     lexicon: 1,
@@ -5210,13 +5204,13 @@ export const schemaDict = {
             properties: {
               feed: {
                 type: 'string',
-                format: 'at-uri',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'at-uri'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyFeedUnsaveFeed: {
     lexicon: 1,
@@ -5233,13 +5227,13 @@ export const schemaDict = {
             properties: {
               feed: {
                 type: 'string',
-                format: 'at-uri',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'at-uri'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphBlock: {
     lexicon: 1,
@@ -5255,16 +5249,16 @@ export const schemaDict = {
           properties: {
             subject: {
               type: 'string',
-              format: 'did',
+              format: 'did'
             },
             createdAt: {
               type: 'string',
-              format: 'datetime',
-            },
-          },
-        },
-      },
-    },
+              format: 'datetime'
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphDefs: {
     lexicon: 1,
@@ -5276,29 +5270,29 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           name: {
             type: 'string',
             maxLength: 64,
-            minLength: 1,
+            minLength: 1
           },
           purpose: {
             type: 'ref',
-            ref: 'lex:app.bsky.graph.defs#listPurpose',
+            ref: 'lex:app.bsky.graph.defs#listPurpose'
           },
           avatar: {
-            type: 'string',
+            type: 'string'
           },
           viewer: {
             type: 'ref',
-            ref: 'lex:app.bsky.graph.defs#listViewerState',
+            ref: 'lex:app.bsky.graph.defs#listViewerState'
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
+            format: 'datetime'
+          }
+        }
       },
       listView: {
         type: 'object',
@@ -5306,45 +5300,45 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           creator: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileView',
+            ref: 'lex:app.bsky.actor.defs#profileView'
           },
           name: {
             type: 'string',
             maxLength: 64,
-            minLength: 1,
+            minLength: 1
           },
           purpose: {
             type: 'ref',
-            ref: 'lex:app.bsky.graph.defs#listPurpose',
+            ref: 'lex:app.bsky.graph.defs#listPurpose'
           },
           description: {
             type: 'string',
             maxGraphemes: 300,
-            maxLength: 3000,
+            maxLength: 3000
           },
           descriptionFacets: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:app.bsky.richtext.facet',
-            },
+              ref: 'lex:app.bsky.richtext.facet'
+            }
           },
           avatar: {
-            type: 'string',
+            type: 'string'
           },
           viewer: {
             type: 'ref',
-            ref: 'lex:app.bsky.graph.defs#listViewerState',
+            ref: 'lex:app.bsky.graph.defs#listViewerState'
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
-          },
-        },
+            format: 'datetime'
+          }
+        }
       },
       listItemView: {
         type: 'object',
@@ -5352,28 +5346,28 @@ export const schemaDict = {
         properties: {
           subject: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileView',
-          },
-        },
+            ref: 'lex:app.bsky.actor.defs#profileView'
+          }
+        }
       },
       listPurpose: {
         type: 'string',
-        knownValues: ['app.bsky.graph.defs#modlist'],
+        knownValues: ['app.bsky.graph.defs#modlist']
       },
       modlist: {
         type: 'token',
         description:
-          'A list of actors to apply an aggregate moderation action (mute/block) on',
+          'A list of actors to apply an aggregate moderation action (mute/block) on'
       },
       listViewerState: {
         type: 'object',
         properties: {
           muted: {
-            type: 'boolean',
-          },
-        },
-      },
-    },
+            type: 'boolean'
+          }
+        }
+      }
+    }
   },
   AppBskyGraphFollow: {
     lexicon: 1,
@@ -5389,16 +5383,16 @@ export const schemaDict = {
           properties: {
             subject: {
               type: 'string',
-              format: 'did',
+              format: 'did'
             },
             createdAt: {
               type: 'string',
-              format: 'datetime',
-            },
-          },
-        },
-      },
-    },
+              format: 'datetime'
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphGetBlocks: {
     lexicon: 1,
@@ -5414,12 +5408,12 @@ export const schemaDict = {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -5428,20 +5422,20 @@ export const schemaDict = {
             required: ['blocks'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               blocks: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.actor.defs#profileView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.actor.defs#profileView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphGetFollowers: {
     lexicon: 1,
@@ -5456,18 +5450,18 @@ export const schemaDict = {
           properties: {
             actor: {
               type: 'string',
-              format: 'at-identifier',
+              format: 'at-identifier'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -5477,23 +5471,23 @@ export const schemaDict = {
             properties: {
               subject: {
                 type: 'ref',
-                ref: 'lex:app.bsky.actor.defs#profileView',
+                ref: 'lex:app.bsky.actor.defs#profileView'
               },
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               followers: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.actor.defs#profileView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.actor.defs#profileView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphGetFollows: {
     lexicon: 1,
@@ -5508,18 +5502,18 @@ export const schemaDict = {
           properties: {
             actor: {
               type: 'string',
-              format: 'at-identifier',
+              format: 'at-identifier'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -5529,23 +5523,23 @@ export const schemaDict = {
             properties: {
               subject: {
                 type: 'ref',
-                ref: 'lex:app.bsky.actor.defs#profileView',
+                ref: 'lex:app.bsky.actor.defs#profileView'
               },
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               follows: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.actor.defs#profileView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.actor.defs#profileView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphGetList: {
     lexicon: 1,
@@ -5560,18 +5554,18 @@ export const schemaDict = {
           properties: {
             list: {
               type: 'string',
-              format: 'at-uri',
+              format: 'at-uri'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -5580,24 +5574,24 @@ export const schemaDict = {
             required: ['list', 'items'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               list: {
                 type: 'ref',
-                ref: 'lex:app.bsky.graph.defs#listView',
+                ref: 'lex:app.bsky.graph.defs#listView'
               },
               items: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.graph.defs#listItemView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.graph.defs#listItemView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphGetListMutes: {
     lexicon: 1,
@@ -5613,12 +5607,12 @@ export const schemaDict = {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -5627,20 +5621,20 @@ export const schemaDict = {
             required: ['lists'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               lists: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.graph.defs#listView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.graph.defs#listView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphGetLists: {
     lexicon: 1,
@@ -5655,18 +5649,18 @@ export const schemaDict = {
           properties: {
             actor: {
               type: 'string',
-              format: 'at-identifier',
+              format: 'at-identifier'
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -5675,20 +5669,20 @@ export const schemaDict = {
             required: ['lists'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               lists: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.graph.defs#listView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.graph.defs#listView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphGetMutes: {
     lexicon: 1,
@@ -5704,12 +5698,12 @@ export const schemaDict = {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -5718,20 +5712,20 @@ export const schemaDict = {
             required: ['mutes'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               mutes: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.actor.defs#profileView',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  ref: 'lex:app.bsky.actor.defs#profileView'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphList: {
     lexicon: 1,
@@ -5747,38 +5741,38 @@ export const schemaDict = {
           properties: {
             purpose: {
               type: 'ref',
-              ref: 'lex:app.bsky.graph.defs#listPurpose',
+              ref: 'lex:app.bsky.graph.defs#listPurpose'
             },
             name: {
               type: 'string',
               maxLength: 64,
-              minLength: 1,
+              minLength: 1
             },
             description: {
               type: 'string',
               maxGraphemes: 300,
-              maxLength: 3000,
+              maxLength: 3000
             },
             descriptionFacets: {
               type: 'array',
               items: {
                 type: 'ref',
-                ref: 'lex:app.bsky.richtext.facet',
-              },
+                ref: 'lex:app.bsky.richtext.facet'
+              }
             },
             avatar: {
               type: 'blob',
               accept: ['image/png', 'image/jpeg'],
-              maxSize: 1000000,
+              maxSize: 1000000
             },
             createdAt: {
               type: 'string',
-              format: 'datetime',
-            },
-          },
-        },
-      },
-    },
+              format: 'datetime'
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphListitem: {
     lexicon: 1,
@@ -5794,20 +5788,20 @@ export const schemaDict = {
           properties: {
             subject: {
               type: 'string',
-              format: 'did',
+              format: 'did'
             },
             list: {
               type: 'string',
-              format: 'at-uri',
+              format: 'at-uri'
             },
             createdAt: {
               type: 'string',
-              format: 'datetime',
-            },
-          },
-        },
-      },
-    },
+              format: 'datetime'
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphMuteActor: {
     lexicon: 1,
@@ -5824,13 +5818,13 @@ export const schemaDict = {
             properties: {
               actor: {
                 type: 'string',
-                format: 'at-identifier',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'at-identifier'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphMuteActorList: {
     lexicon: 1,
@@ -5847,13 +5841,13 @@ export const schemaDict = {
             properties: {
               list: {
                 type: 'string',
-                format: 'at-uri',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'at-uri'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphUnmuteActor: {
     lexicon: 1,
@@ -5870,13 +5864,13 @@ export const schemaDict = {
             properties: {
               actor: {
                 type: 'string',
-                format: 'at-identifier',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'at-identifier'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyGraphUnmuteActorList: {
     lexicon: 1,
@@ -5893,13 +5887,13 @@ export const schemaDict = {
             properties: {
               list: {
                 type: 'string',
-                format: 'at-uri',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'at-uri'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyNotificationGetUnreadCount: {
     lexicon: 1,
@@ -5912,9 +5906,9 @@ export const schemaDict = {
           properties: {
             seenAt: {
               type: 'string',
-              format: 'datetime',
-            },
-          },
+              format: 'datetime'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -5923,13 +5917,13 @@ export const schemaDict = {
             required: ['count'],
             properties: {
               count: {
-                type: 'integer',
-              },
-            },
-          },
-        },
-      },
-    },
+                type: 'integer'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyNotificationListNotifications: {
     lexicon: 1,
@@ -5944,16 +5938,16 @@ export const schemaDict = {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
+              type: 'string'
             },
             seenAt: {
               type: 'string',
-              format: 'datetime',
-            },
-          },
+              format: 'datetime'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -5962,18 +5956,18 @@ export const schemaDict = {
             required: ['notifications'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               notifications: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.notification.listNotifications#notification',
-                },
-              },
-            },
-          },
-        },
+                  ref: 'lex:app.bsky.notification.listNotifications#notification'
+                }
+              }
+            }
+          }
+        }
       },
       notification: {
         type: 'object',
@@ -5984,20 +5978,20 @@ export const schemaDict = {
           'reason',
           'record',
           'isRead',
-          'indexedAt',
+          'indexedAt'
         ],
         properties: {
           uri: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           cid: {
             type: 'string',
-            format: 'cid',
+            format: 'cid'
           },
           author: {
             type: 'ref',
-            ref: 'lex:app.bsky.actor.defs#profileView',
+            ref: 'lex:app.bsky.actor.defs#profileView'
           },
           reason: {
             type: 'string',
@@ -6009,33 +6003,33 @@ export const schemaDict = {
               'follow',
               'mention',
               'reply',
-              'quote',
-            ],
+              'quote'
+            ]
           },
           reasonSubject: {
             type: 'string',
-            format: 'at-uri',
+            format: 'at-uri'
           },
           record: {
-            type: 'unknown',
+            type: 'unknown'
           },
           isRead: {
-            type: 'boolean',
+            type: 'boolean'
           },
           indexedAt: {
             type: 'string',
-            format: 'datetime',
+            format: 'datetime'
           },
           labels: {
             type: 'array',
             items: {
               type: 'ref',
-              ref: 'lex:com.atproto.label.defs#label',
-            },
-          },
-        },
-      },
-    },
+              ref: 'lex:com.atproto.label.defs#label'
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyNotificationUpdateSeen: {
     lexicon: 1,
@@ -6052,13 +6046,13 @@ export const schemaDict = {
             properties: {
               seenAt: {
                 type: 'string',
-                format: 'datetime',
-              },
-            },
-          },
-        },
-      },
-    },
+                format: 'datetime'
+              }
+            }
+          }
+        }
+      }
+    }
   },
   AppBskyRichtextFacet: {
     lexicon: 1,
@@ -6070,7 +6064,7 @@ export const schemaDict = {
         properties: {
           index: {
             type: 'ref',
-            ref: 'lex:app.bsky.richtext.facet#byteSlice',
+            ref: 'lex:app.bsky.richtext.facet#byteSlice'
           },
           features: {
             type: 'array',
@@ -6078,11 +6072,11 @@ export const schemaDict = {
               type: 'union',
               refs: [
                 'lex:app.bsky.richtext.facet#mention',
-                'lex:app.bsky.richtext.facet#link',
-              ],
-            },
-          },
-        },
+                'lex:app.bsky.richtext.facet#link'
+              ]
+            }
+          }
+        }
       },
       mention: {
         type: 'object',
@@ -6091,9 +6085,9 @@ export const schemaDict = {
         properties: {
           did: {
             type: 'string',
-            format: 'did',
-          },
-        },
+            format: 'did'
+          }
+        }
       },
       link: {
         type: 'object',
@@ -6102,9 +6096,9 @@ export const schemaDict = {
         properties: {
           uri: {
             type: 'string',
-            format: 'uri',
-          },
-        },
+            format: 'uri'
+          }
+        }
       },
       byteSlice: {
         type: 'object',
@@ -6114,15 +6108,15 @@ export const schemaDict = {
         properties: {
           byteStart: {
             type: 'integer',
-            minimum: 0,
+            minimum: 0
           },
           byteEnd: {
             type: 'integer',
-            minimum: 0,
-          },
-        },
-      },
-    },
+            minimum: 0
+          }
+        }
+      }
+    }
   },
   AppBskyUnspeccedGetPopular: {
     lexicon: 1,
@@ -6136,18 +6130,18 @@ export const schemaDict = {
           properties: {
             includeNsfw: {
               type: 'boolean',
-              default: false,
+              default: false
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 50
             },
             cursor: {
-              type: 'string',
-            },
-          },
+              type: 'string'
+            }
+          }
         },
         output: {
           encoding: 'application/json',
@@ -6156,21 +6150,21 @@ export const schemaDict = {
             required: ['feed'],
             properties: {
               cursor: {
-                type: 'string',
+                type: 'string'
               },
               feed: {
                 type: 'array',
                 items: {
                   type: 'ref',
-                  ref: 'lex:app.bsky.feed.defs#feedViewPost',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  },
+                  ref: 'lex:app.bsky.feed.defs#feedViewPost'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 export const schemas: LexiconDoc[] = Object.values(schemaDict) as LexiconDoc[]
 export const lexicons: Lexicons = new Lexicons(schemas)
@@ -6297,5 +6291,5 @@ export const ids = {
     'app.bsky.notification.listNotifications',
   AppBskyNotificationUpdateSeen: 'app.bsky.notification.updateSeen',
   AppBskyRichtextFacet: 'app.bsky.richtext.facet',
-  AppBskyUnspeccedGetPopular: 'app.bsky.unspecced.getPopular',
+  AppBskyUnspeccedGetPopular: 'app.bsky.unspecced.getPopular'
 }

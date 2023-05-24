@@ -5,7 +5,7 @@ import { DidResolver } from '@atproto/did-resolver'
 export const validateAuth = async (
   req: express.Request,
   serviceDid: string,
-  didResolver: DidResolver,
+  didResolver: DidResolver
 ): Promise<string> => {
   const { authorization = '' } = req.headers
   if (!authorization.startsWith('Bearer ')) {

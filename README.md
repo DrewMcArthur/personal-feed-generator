@@ -106,7 +106,7 @@ The skeleton that a Feed Generator puts together is, in its simplest form, a lis
 ;[
   { post: 'at://did:example:1234/app.bsky.feed.post/1' },
   { post: 'at://did:example:1234/app.bsky.feed.post/2' },
-  { post: 'at://did:example:1234/app.bsky.feed.post/3' },
+  { post: 'at://did:example:1234/app.bsky.feed.post/3' }
 ]
 ```
 
@@ -146,12 +146,12 @@ This JWT header/payload takes the format:
 ```ts
 const header = {
   type: 'JWT',
-  alg: 'ES256K', // (key algorithm) - in this case secp256k1
+  alg: 'ES256K' // (key algorithm) - in this case secp256k1
 }
 const payload = {
   iss: 'did:example:alice', // (issuer) the requesting user's DID
   aud: 'did:example:feedGenerator', // (audience) the DID of the Feed Generator
-  exp: 1683643619, // (expiration) unix timestamp in seconds
+  exp: 1683643619 // (expiration) unix timestamp in seconds
 }
 ```
 

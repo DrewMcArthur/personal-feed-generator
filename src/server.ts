@@ -25,7 +25,7 @@ export class FeedGenerator {
     db: Database,
     firehose: PersonalizedFirehoseSubscription,
     embeddingFirehose: EmbeddingFirehoseSubscription,
-    cfg: Config,
+    cfg: Config
   ) {
     this.app = app
     this.db = db
@@ -42,19 +42,19 @@ export class FeedGenerator {
       db,
       cfg.subscriptionEndpoint,
       model,
-      cfg.cacheTtlMin,
+      cfg.cacheTtlMin
     ) // TODO: will need to move to a CONST allowed_DIDs or something
 
     const embeddingFirehose = new EmbeddingFirehoseSubscription(
       db,
       cfg.embeddingSubscriptionEndpoint,
-      model,
+      model
     )
 
     const didCache = new MemoryCache()
     const didResolver = new DidResolver(
       { plcUrl: 'https://plc.directory' },
-      didCache,
+      didCache
     )
 
     const server = createServer({
@@ -62,13 +62,13 @@ export class FeedGenerator {
       payload: {
         jsonLimit: 100 * 1024, // 100kb
         textLimit: 100 * 1024, // 100kb
-        blobLimit: 5 * 1024 * 1024, // 5mb
-      },
+        blobLimit: 5 * 1024 * 1024 // 5mb
+      }
     })
     const ctx: AppContext = {
       db,
       didResolver,
-      cfg,
+      cfg
     }
     feedGeneration(server, ctx)
     describeGenerator(server, ctx)
